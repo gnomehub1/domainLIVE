@@ -8,6 +8,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;500;800&family=Righteous&display=swap" rel="stylesheet">
 
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
+
 <style>
   :root {
     /* WPAP PALETTE */
@@ -506,6 +513,16 @@
     object-fit: cover;
     transition: transform 0.5s ease;
     filter: saturate(0.8) contrast(1.1);
+  }
+
+  /* Image lazy loading fade-in animation */
+  .art-card img[data-src] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+  }
+
+  .art-card img.loaded {
+    opacity: 1;
   }
 
   /* Rotation Logic - Base rotation FIRST */
@@ -1373,56 +1390,6 @@
     color: var(--w-dark);
   }
 
-  /* Keyboard Lightbox Elements */
-  .keyboard-size-selector {
-    margin: 20px 0;
-    padding: 15px;
-    border: 3px solid var(--w-dark);
-    background: #f9f9f9;
-  }
-
-  .keyboard-size-selector h4 {
-    font-family: 'Righteous', cursive;
-    font-size: 1.1rem;
-    margin: 0 0 15px 0;
-    text-transform: uppercase;
-  }
-
-  .keyboard-size-selector label {
-    display: block;
-    padding: 10px;
-    margin: 8px 0;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.2s;
-  }
-
-  .keyboard-size-selector label:hover {
-    background: var(--w-yellow);
-    border-color: var(--w-dark);
-  }
-
-  .keyboard-size-selector input[type="radio"] {
-    margin-right: 10px;
-    cursor: pointer;
-    width: 18px;
-    height: 18px;
-  }
-
-  .keyboard-pricing {
-    margin: 15px 0;
-    padding: 15px;
-    background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
-    border: 2px solid var(--w-dark);
-  }
-
-  .keyboard-pricing p {
-    margin: 0;
-    font-size: 1rem;
-  }
-
   /* General Rug Size Selector (Gospel & Wall Rugs) */
   .rug-size-selector {
     margin: 20px 0;
@@ -1508,6 +1475,50 @@
     outline: none;
     background: var(--w-yellow);
     box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+
+  /* --- SHOW MORE BUTTON --- */
+  .show-more-btn {
+    display: block;
+    margin: 40px auto;
+    padding: 16px 40px;
+    background: var(--w-dark);
+    color: var(--w-yellow);
+    border: none;
+    font-family: 'Kanit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: var(--shadow-depth);
+    transition: all 0.3s ease;
+    min-width: 200px;
+  }
+
+  .show-more-btn:hover {
+    background: var(--w-yellow);
+    color: var(--w-dark);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .show-more-btn:active {
+    transform: translateY(0);
+    box-shadow: 4px 4px 0px var(--w-dark);
+  }
+
+  .show-more-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  @media (max-width: 640px) {
+    .show-more-btn {
+      font-size: 0.95rem;
+      padding: 14px 30px;
+      min-width: 160px;
+    }
   }
 
   /* --- RESPONSIVE --- */
@@ -1816,14 +1827,6 @@
     .card-tall { grid-row: span 2; }
     .card-big { grid-column: span 2; grid-row: span 2; }
 
-    /* Keyboard gallery: 1-column for better visibility (all same aspect ratio) */
-    #keyboard-gallery {
-      grid-template-columns: 1fr;
-      grid-auto-rows: 280px;
-      gap: 25px;
-      padding: 25px 15px;
-    }
-
     /* Reduce rotation on mobile */
     .art-card:nth-child(odd) { transform: rotate(-0.5deg); }
     .art-card:nth-child(even) { transform: rotate(0.5deg); }
@@ -1840,11 +1843,6 @@
       white-space: normal;
       font-size: 1.2rem;
       text-align: center;
-    }
-
-    .keyboard-size-selector label {
-      font-size: 0.9rem;
-      padding: 8px;
     }
   }
 
@@ -2018,14 +2016,6 @@
       grid-row: span 2; /* Double height - feature card */
     }
 
-    /* Keyboard gallery: Keep 1-column on very small screens too */
-    #keyboard-gallery {
-      grid-template-columns: 1fr;
-      grid-auto-rows: 250px;
-      gap: 20px;
-      padding: 15px;
-    }
-
     /* Maintain subtle rotations for playful aesthetic */
     .art-card:nth-child(odd) {
       transform: rotate(-0.3deg); /* Very subtle left tilt */
@@ -2089,12 +2079,6 @@
     .card-tag {
       font-size: 0.6rem;
       padding: 2px 5px;
-    }
-
-    /* Keyboard gallery: Adjust sizing for 400px screens */
-    #keyboard-gallery {
-      grid-auto-rows: 230px;
-      gap: 15px;
     }
   }
 
@@ -2510,7 +2494,7 @@
   <nav class="hamburger-menu">
     <a href="#" class="hamburger-menu-item active" onclick="showSection('featured', this); toggleHamburgerMenu(); return false;">Featured</a>
     <a href="#" class="hamburger-menu-item" onclick="showSection('gospel', this); toggleHamburgerMenu(); return false;">Gospel</a>
-    <a href="#" class="hamburger-menu-item" onclick="showSection('keyboard', this); toggleHamburgerMenu(); return false;">Keyboard</a>
+    <a href="#" class="hamburger-menu-item" onclick="showSection('pets', this); toggleHamburgerMenu(); return false;">Pets</a>
     <a href="#" class="hamburger-menu-item" onclick="showSection('wall', this); toggleHamburgerMenu(); return false;">Pop Art</a>
     <a href="#" class="hamburger-menu-item" onclick="showSection('abstract', this); toggleHamburgerMenu(); return false;">Abstract</a>
   </nav>
@@ -2583,913 +2567,75 @@
   <section id="gospel-section" class="category-section">
     <h2 class="section-title">Gospel</h2>
     <div class="gallery-container">
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_1.jpg', 'Gospel Rug #1', 'Gospel Rugs')">
-        <img src="maingrid_1.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #1</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_2.jpg', 'Gospel Rug #2', 'Gospel Rugs')">
-        <img src="maingrid_2.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #2</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_3.jpg', 'Gospel Rug #3', 'Gospel Rugs')">
-        <img src="maingrid_3.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #3</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_4.jpg', 'Gospel Rug #4', 'Gospel Rugs')">
-        <img src="maingrid_4.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #4</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('maingrid_5.jpg', 'Gospel Rug #5', 'Gospel Rugs')">
-        <img src="maingrid_5.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Gospel #5</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_6.jpg', 'Gospel Rug #6', 'Gospel Rugs')">
-        <img src="maingrid_6.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #6</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_7.jpg', 'Gospel Rug #7', 'Gospel Rugs')">
-        <img src="maingrid_7.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #7</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_8.jpg', 'Gospel Rug #8', 'Gospel Rugs')">
-        <img src="maingrid_8.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #8</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_9.jpg', 'Gospel Rug #9', 'Gospel Rugs')">
-        <img src="maingrid_9.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #9</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_10.jpg', 'Gospel Rug #10', 'Gospel Rugs')">
-        <img src="maingrid_10.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #10</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_11.jpg', 'Gospel Rug #11', 'Gospel Rugs')">
-        <img src="maingrid_11.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #11</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_12.jpg', 'Gospel Rug #12', 'Gospel Rugs')">
-        <img src="maingrid_12.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #12</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_13.jpg', 'Gospel Rug #13', 'Gospel Rugs')">
-        <img src="maingrid_13.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #13</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_14.jpg', 'Gospel Rug #14', 'Gospel Rugs')">
-        <img src="maingrid_14.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #14</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_15.jpg', 'Gospel Rug #15', 'Gospel Rugs')">
-        <img src="maingrid_15.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #15</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_16.jpg', 'Gospel Rug #16', 'Gospel Rugs')">
-        <img src="maingrid_16.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #16</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_17.jpg', 'Gospel Rug #17', 'Gospel Rugs')">
-        <img src="maingrid_17.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #17</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_18.jpg', 'Gospel Rug #18', 'Gospel Rugs')">
-        <img src="maingrid_18.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #18</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_19.jpg', 'Gospel Rug #19', 'Gospel Rugs')">
-        <img src="maingrid_19.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #19</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_20.jpg', 'Gospel Rug #20', 'Gospel Rugs')">
-        <img src="maingrid_20.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #20</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('maingrid_21.jpg', 'Gospel Rug #21', 'Gospel Rugs')">
-        <img src="maingrid_21.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Gospel #21</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_22.jpg', 'Gospel Rug #22', 'Gospel Rugs')">
-        <img src="maingrid_22.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #22</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_23.jpg', 'Gospel Rug #23', 'Gospel Rugs')">
-        <img src="maingrid_23.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #23</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_24.jpg', 'Gospel Rug #24', 'Gospel Rugs')">
-        <img src="maingrid_24.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #24</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_25.jpg', 'Gospel Rug #25', 'Gospel Rugs')">
-        <img src="maingrid_25.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #25</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_26.jpg', 'Gospel Rug #26', 'Gospel Rugs')">
-        <img src="maingrid_26.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #26</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_27.jpg', 'Gospel Rug #27', 'Gospel Rugs')">
-        <img src="maingrid_27.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #27</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_28.jpg', 'Gospel Rug #28', 'Gospel Rugs')">
-        <img src="maingrid_28.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #28</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_29.jpg', 'Gospel Rug #29', 'Gospel Rugs')">
-        <img src="maingrid_29.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #29</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_30.jpg', 'Gospel Rug #30', 'Gospel Rugs')">
-        <img src="maingrid_30.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #30</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_31.jpg', 'Gospel Rug #31', 'Gospel Rugs')">
-        <img src="maingrid_31.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #31</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_32.jpg', 'Gospel Rug #32', 'Gospel Rugs')">
-        <img src="maingrid_32.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #32</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_33.jpg', 'Gospel Rug #33', 'Gospel Rugs')">
-        <img src="maingrid_33.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #33</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_34.jpg', 'Gospel Rug #34', 'Gospel Rugs')">
-        <img src="maingrid_34.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #34</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('maingrid_35.jpg', 'Gospel Rug #35', 'Gospel Rugs')">
-        <img src="maingrid_35.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Gospel #35</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_36.jpg', 'Gospel Rug #36', 'Gospel Rugs')">
-        <img src="maingrid_36.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #36</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_37.jpg', 'Gospel Rug #37', 'Gospel Rugs')">
-        <img src="maingrid_37.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #37</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_38.jpg', 'Gospel Rug #38', 'Gospel Rugs')">
-        <img src="maingrid_38.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #38</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_39.jpg', 'Gospel Rug #39', 'Gospel Rugs')">
-        <img src="maingrid_39.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #39</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_40.jpg', 'Gospel Rug #40', 'Gospel Rugs')">
-        <img src="maingrid_40.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #40</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_41.jpg', 'Gospel Rug #41', 'Gospel Rugs')">
-        <img src="maingrid_41.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #41</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_42.jpg', 'Gospel Rug #42', 'Gospel Rugs')">
-        <img src="maingrid_42.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #42</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_43.jpg', 'Gospel Rug #43', 'Gospel Rugs')">
-        <img src="maingrid_43.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #43</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_44.jpg', 'Gospel Rug #44', 'Gospel Rugs')">
-        <img src="maingrid_44.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #44</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_45.jpg', 'Gospel Rug #45', 'Gospel Rugs')">
-        <img src="maingrid_45.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #45</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_46.jpg', 'Gospel Rug #46', 'Gospel Rugs')">
-        <img src="maingrid_46.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #46</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_47.jpg', 'Gospel Rug #47', 'Gospel Rugs')">
-        <img src="maingrid_47.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #47</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_48.jpg', 'Gospel Rug #48', 'Gospel Rugs')">
-        <img src="maingrid_48.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #48</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_49.jpg', 'Gospel Rug #49', 'Gospel Rugs')">
-        <img src="maingrid_49.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #49</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_50.jpg', 'Gospel Rug #50', 'Gospel Rugs')">
-        <img src="maingrid_50.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #50</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('maingrid_51.jpg', 'Gospel Rug #51', 'Gospel Rugs')">
-        <img src="maingrid_51.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Gospel #51</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_52.jpg', 'Gospel Rug #52', 'Gospel Rugs')">
-        <img src="maingrid_52.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #52</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_53.jpg', 'Gospel Rug #53', 'Gospel Rugs')">
-        <img src="maingrid_53.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #53</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_54.jpg', 'Gospel Rug #54', 'Gospel Rugs')">
-        <img src="maingrid_54.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #54</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_55.jpg', 'Gospel Rug #55', 'Gospel Rugs')">
-        <img src="maingrid_55.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #55</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_56.jpg', 'Gospel Rug #56', 'Gospel Rugs')">
-        <img src="maingrid_56.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #56</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_57.jpg', 'Gospel Rug #57', 'Gospel Rugs')">
-        <img src="maingrid_57.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #57</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_58.jpg', 'Gospel Rug #58', 'Gospel Rugs')">
-        <img src="maingrid_58.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #58</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_59.jpg', 'Gospel Rug #59', 'Gospel Rugs')">
-        <img src="maingrid_59.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #59</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('maingrid_60.jpg', 'Gospel Rug #60', 'Gospel Rugs')">
-        <img src="maingrid_60.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #60</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_61.jpg', 'Gospel Rug #61', 'Gospel Rugs')">
-        <img src="maingrid_61.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #61</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_62.jpg', 'Gospel Rug #62', 'Gospel Rugs')">
-        <img src="maingrid_62.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #62</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_63.jpg', 'Gospel Rug #63', 'Gospel Rugs')">
-        <img src="maingrid_63.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #63</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_64.jpg', 'Gospel Rug #64', 'Gospel Rugs')">
-        <img src="maingrid_64.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #64</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('maingrid_65.jpg', 'Gospel Rug #65', 'Gospel Rugs')">
-        <img src="maingrid_65.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Gospel #65</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_66.jpg', 'Gospel Rug #66', 'Gospel Rugs')">
-        <img src="maingrid_66.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #66</div>
-      </div>
-
-      <div class="art-card card" data-price="100" onclick="openLightbox('maingrid_67.jpg', 'Gospel Rug #67', 'Gospel Rugs')">
-        <img src="maingrid_67.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #67</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_68.jpg', 'Gospel Rug #68', 'Gospel Rugs')">
-        <img src="maingrid_68.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #68</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('maingrid_69.jpg', 'Gospel Rug #69', 'Gospel Rugs')">
-        <img src="maingrid_69.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Gospel #69</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_70.jpg', 'Gospel Rug #70', 'Gospel Rugs')">
-        <img src="maingrid_70.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #70</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_71.jpg', 'Gospel Rug #71', 'Gospel Rugs')">
-        <img src="maingrid_71.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #71</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_72.jpg', 'Gospel Rug #72', 'Gospel Rugs')">
-        <img src="maingrid_72.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #72</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_73.jpg', 'Gospel Rug #73', 'Gospel Rugs')">
-        <img src="maingrid_73.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #73</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_74.jpg', 'Gospel Rug #74', 'Gospel Rugs')">
-        <img src="maingrid_74.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #74</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_75.jpg', 'Gospel Rug #75', 'Gospel Rugs')">
-        <img src="maingrid_75.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #75</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_76.jpg', 'Gospel Rug #76', 'Gospel Rugs')">
-        <img src="maingrid_76.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #76</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_77.jpg', 'Gospel Rug #77', 'Gospel Rugs')">
-        <img src="maingrid_77.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #77</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_78.jpg', 'Gospel Rug #78', 'Gospel Rugs')">
-        <img src="maingrid_78.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #78</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_79.jpg', 'Gospel Rug #79', 'Gospel Rugs')">
-        <img src="maingrid_79.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #79</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('maingrid_80.jpg', 'Gospel Rug #80', 'Gospel Rugs')">
-        <img src="maingrid_80.jpg" alt="Gospel Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Gospel #80</div>
-      </div>
-
+      <!-- Dynamically rendered on navigation -->
     </div>
   </section>
 
-  <!-- KEYBOARD RUGS SECTION -->
-  <section id="keyboard-section" class="category-section">
-    <h2 class="section-title">Keyboard</h2>
-    <div class="gallery-container" id="keyboard-gallery">
+  <!-- PETS SECTION - Hero Grid Style -->
+  <section id="pets-section" class="category-section">
+    <h2 class="section-title">Pets</h2>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_1.jpg', 'Keyboard Rug #1', 'Keyboard Rugs')">
-        <img src="key_1.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #1</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_2.jpg', 'Keyboard Rug #2', 'Keyboard Rugs')">
-        <img src="key_2.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #2</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_3.jpg', 'Keyboard Rug #3', 'Keyboard Rugs')">
-        <img src="key_3.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #3</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_4.jpg', 'Keyboard Rug #4', 'Keyboard Rugs')">
-        <img src="key_4.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #4</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_5.jpg', 'Keyboard Rug #5', 'Keyboard Rugs')">
-        <img src="key_5.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #5</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_6.jpg', 'Keyboard Rug #6', 'Keyboard Rugs')">
-        <img src="key_6.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #6</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_7.jpg', 'Keyboard Rug #7', 'Keyboard Rugs')">
-        <img src="key_7.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #7</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_8.jpg', 'Keyboard Rug #8', 'Keyboard Rugs')">
-        <img src="key_8.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #8</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_9.jpg', 'Keyboard Rug #9', 'Keyboard Rugs')">
-        <img src="key_9.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #9</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_10.jpg', 'Keyboard Rug #10', 'Keyboard Rugs')">
-        <img src="key_10.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #10</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_11.jpg', 'Keyboard Rug #11', 'Keyboard Rugs')">
-        <img src="key_11.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #11</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_12.jpg', 'Keyboard Rug #12', 'Keyboard Rugs')">
-        <img src="key_12.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #12</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_13.jpg', 'Keyboard Rug #13', 'Keyboard Rugs')">
-        <img src="key_13.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #13</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_14.jpg', 'Keyboard Rug #14', 'Keyboard Rugs')">
-        <img src="key_14.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #14</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_15.jpg', 'Keyboard Rug #15', 'Keyboard Rugs')">
-        <img src="key_15.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #15</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_16.jpg', 'Keyboard Rug #16', 'Keyboard Rugs')">
-        <img src="key_16.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #16</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_17.jpg', 'Keyboard Rug #17', 'Keyboard Rugs')">
-        <img src="key_17.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #17</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_18.jpg', 'Keyboard Rug #18', 'Keyboard Rugs')">
-        <img src="key_18.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #18</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_19.jpg', 'Keyboard Rug #19', 'Keyboard Rugs')">
-        <img src="key_19.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #19</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_20.jpg', 'Keyboard Rug #20', 'Keyboard Rugs')">
-        <img src="key_20.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #20</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_21.jpg', 'Keyboard Rug #21', 'Keyboard Rugs')">
-        <img src="key_21.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #21</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_22.jpg', 'Keyboard Rug #22', 'Keyboard Rugs')">
-        <img src="key_22.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #22</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_23.jpg', 'Keyboard Rug #23', 'Keyboard Rugs')">
-        <img src="key_23.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #23</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_24.jpg', 'Keyboard Rug #24', 'Keyboard Rugs')">
-        <img src="key_24.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #24</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_25.jpg', 'Keyboard Rug #25', 'Keyboard Rugs')">
-        <img src="key_25.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #25</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_26.jpg', 'Keyboard Rug #26', 'Keyboard Rugs')">
-        <img src="key_26.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #26</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_27.jpg', 'Keyboard Rug #27', 'Keyboard Rugs')">
-        <img src="key_27.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #27</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_28.jpg', 'Keyboard Rug #28', 'Keyboard Rugs')">
-        <img src="key_28.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #28</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_29.jpg', 'Keyboard Rug #29', 'Keyboard Rugs')">
-        <img src="key_29.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #29</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_30.jpg', 'Keyboard Rug #30', 'Keyboard Rugs')">
-        <img src="key_30.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #30</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_31.jpg', 'Keyboard Rug #31', 'Keyboard Rugs')">
-        <img src="key_31.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #31</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_32.jpg', 'Keyboard Rug #32', 'Keyboard Rugs')">
-        <img src="key_32.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #32</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_33.jpg', 'Keyboard Rug #33', 'Keyboard Rugs')">
-        <img src="key_33.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #33</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_34.jpg', 'Keyboard Rug #34', 'Keyboard Rugs')">
-        <img src="key_34.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #34</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_35.jpg', 'Keyboard Rug #35', 'Keyboard Rugs')">
-        <img src="key_35.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #35</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_36.jpg', 'Keyboard Rug #36', 'Keyboard Rugs')">
-        <img src="key_36.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #36</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_37.jpg', 'Keyboard Rug #37', 'Keyboard Rugs')">
-        <img src="key_37.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #37</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_38.jpg', 'Keyboard Rug #38', 'Keyboard Rugs')">
-        <img src="key_38.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #38</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_39.jpg', 'Keyboard Rug #39', 'Keyboard Rugs')">
-        <img src="key_39.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #39</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_40.jpg', 'Keyboard Rug #40', 'Keyboard Rugs')">
-        <img src="key_40.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #40</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_41.jpg', 'Keyboard Rug #41', 'Keyboard Rugs')">
-        <img src="key_41.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #41</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_42.jpg', 'Keyboard Rug #42', 'Keyboard Rugs')">
-        <img src="key_42.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #42</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_43.jpg', 'Keyboard Rug #43', 'Keyboard Rugs')">
-        <img src="key_43.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #43</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_44.jpg', 'Keyboard Rug #44', 'Keyboard Rugs')">
-        <img src="key_44.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #44</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_45.jpg', 'Keyboard Rug #45', 'Keyboard Rugs')">
-        <img src="key_45.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #45</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_46.jpg', 'Keyboard Rug #46', 'Keyboard Rugs')">
-        <img src="key_46.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #46</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_47.jpg', 'Keyboard Rug #47', 'Keyboard Rugs')">
-        <img src="key_47.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #47</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_48.jpg', 'Keyboard Rug #48', 'Keyboard Rugs')">
-        <img src="key_48.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #48</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_49.jpg', 'Keyboard Rug #49', 'Keyboard Rugs')">
-        <img src="key_49.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #49</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_50.jpg', 'Keyboard Rug #50', 'Keyboard Rugs')">
-        <img src="key_50.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #50</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_51.jpg', 'Keyboard Rug #51', 'Keyboard Rugs')">
-        <img src="key_51.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #51</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_52.jpg', 'Keyboard Rug #52', 'Keyboard Rugs')">
-        <img src="key_52.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #52</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_53.jpg', 'Keyboard Rug #53', 'Keyboard Rugs')">
-        <img src="key_53.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #53</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_54.jpg', 'Keyboard Rug #54', 'Keyboard Rugs')">
-        <img src="key_54.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #54</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_55.jpg', 'Keyboard Rug #55', 'Keyboard Rugs')">
-        <img src="key_55.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #55</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_56.jpg', 'Keyboard Rug #56', 'Keyboard Rugs')">
-        <img src="key_56.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #56</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_57.jpg', 'Keyboard Rug #57', 'Keyboard Rugs')">
-        <img src="key_57.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #57</div>
-      </div>
-
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_58.jpg', 'Keyboard Rug #58', 'Keyboard Rugs')">
-        <img src="key_58.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #58</div>
-      </div>
+    <!-- Use same hero-grid-container as FEATURED section -->
+    <div class="hero-grid-container">
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_59.jpg', 'Keyboard Rug #59', 'Keyboard Rugs')">
-        <img src="key_59.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #59</div>
+      <!-- Pet Card 1 -->
+      <div class="hero-card" onclick="openLightbox('pet1.jpg', 'Pet Design #1', 'Pet Rugs', true)">
+        <img src="pet1.jpg" alt="Pet Design 1" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_60.jpg', 'Keyboard Rug #60', 'Keyboard Rugs')">
-        <img src="key_60.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #60</div>
+      <!-- Pet Card 2 -->
+      <div class="hero-card" onclick="openLightbox('pet2.jpg', 'Pet Design #2', 'Pet Rugs', true)">
+        <img src="pet2.jpg" alt="Pet Design 2" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_61.jpg', 'Keyboard Rug #61', 'Keyboard Rugs')">
-        <img src="key_61.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #61</div>
+      <!-- Pet Card 3 -->
+      <div class="hero-card" onclick="openLightbox('pet3.jpg', 'Pet Design #3', 'Pet Rugs', true)">
+        <img src="pet3.jpg" alt="Pet Design 3" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_62.jpg', 'Keyboard Rug #62', 'Keyboard Rugs')">
-        <img src="key_62.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #62</div>
+      <!-- Pet Card 4 -->
+      <div class="hero-card" onclick="openLightbox('pet4.jpg', 'Pet Design #4', 'Pet Rugs', true)">
+        <img src="pet4.jpg" alt="Pet Design 4" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_63.jpg', 'Keyboard Rug #63', 'Keyboard Rugs')">
-        <img src="key_63.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #63</div>
+      <!-- Pet Card 5 -->
+      <div class="hero-card" onclick="openLightbox('pet5.jpg', 'Pet Design #5', 'Pet Rugs', true)">
+        <img src="pet5.jpg" alt="Pet Design 5" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_64.jpg', 'Keyboard Rug #64', 'Keyboard Rugs')">
-        <img src="key_64.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #64</div>
+      <!-- Pet Card 6 -->
+      <div class="hero-card" onclick="openLightbox('pet6.jpg', 'Pet Design #6', 'Pet Rugs', true)">
+        <img src="pet6.jpg" alt="Pet Design 6" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_65.jpg', 'Keyboard Rug #65', 'Keyboard Rugs')">
-        <img src="key_65.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #65</div>
+      <!-- Pet Card 7 -->
+      <div class="hero-card" onclick="openLightbox('pet7.jpg', 'Pet Design #7', 'Pet Rugs', true)">
+        <img src="pet7.jpg" alt="Pet Design 7" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_66.jpg', 'Keyboard Rug #66', 'Keyboard Rugs')">
-        <img src="key_66.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #66</div>
+      <!-- Pet Card 8 -->
+      <div class="hero-card" onclick="openLightbox('pet8.jpg', 'Pet Design #8', 'Pet Rugs', true)">
+        <img src="pet8.jpg" alt="Pet Design 8" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_67.jpg', 'Keyboard Rug #67', 'Keyboard Rugs')">
-        <img src="key_67.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #67</div>
+      <!-- Pet Card 9 -->
+      <div class="hero-card" onclick="openLightbox('pet9.jpg', 'Pet Design #9', 'Pet Rugs', true)">
+        <img src="pet9.jpg" alt="Pet Design 9" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_68.jpg', 'Keyboard Rug #68', 'Keyboard Rugs')">
-        <img src="key_68.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #68</div>
+      <!-- Pet Card 10 -->
+      <div class="hero-card" onclick="openLightbox('pet10.jpg', 'Pet Design #10', 'Pet Rugs', true)">
+        <img src="pet10.jpg" alt="Pet Design 10" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_69.jpg', 'Keyboard Rug #69', 'Keyboard Rugs')">
-        <img src="key_69.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #69</div>
+      <!-- Pet Card 11 -->
+      <div class="hero-card" onclick="openLightbox('pet11.jpg', 'Pet Design #11', 'Pet Rugs', true)">
+        <img src="pet11.jpg" alt="Pet Design 11" class="hero-image" loading="lazy">
       </div>
 
-      <div class="art-card card-wide" data-base-price="75" onclick="openLightbox('key_70.jpg', 'Keyboard Rug #70', 'Keyboard Rugs')">
-        <img src="key_70.jpg" alt="Keyboard Rug" loading="lazy">
-        <div class="card-price">From $75</div>
-        <div class="card-tag">Keyboard #70</div>
+      <!-- Pet Card 12 -->
+      <div class="hero-card" onclick="openLightbox('pet12.jpg', 'Pet Design #12', 'Pet Rugs', true)">
+        <img src="pet12.jpg" alt="Pet Design 12" class="hero-image" loading="lazy">
       </div>
 
     </div>
@@ -3499,559 +2645,7 @@
   <section id="wall-section" class="category-section">
     <h2 class="section-title">Pop Art</h2>
     <div class="gallery-container">
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('wall_1.jpg', 'Wall Rug #1', 'Wall/Floor Rugs')">
-        <img src="wall_1.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #1</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_2.jpg', 'Wall Rug #2', 'Wall/Floor Rugs')">
-        <img src="wall_2.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #2</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_3.jpg', 'Wall Rug #3', 'Wall/Floor Rugs')">
-        <img src="wall_3.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #3</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_4.jpg', 'Wall Rug #4', 'Wall/Floor Rugs')">
-        <img src="wall_4.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #4</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_5.jpg', 'Wall Rug #5', 'Wall/Floor Rugs')">
-        <img src="wall_5.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #5</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('wall_6.jpg', 'Wall Rug #6', 'Wall/Floor Rugs')">
-        <img src="wall_6.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #6</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_7.jpg', 'Wall Rug #7', 'Wall/Floor Rugs')">
-        <img src="wall_7.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #7</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_8.jpg', 'Wall Rug #8', 'Wall/Floor Rugs')">
-        <img src="wall_8.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #8</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_9.jpg', 'Wall Rug #9', 'Wall/Floor Rugs')">
-        <img src="wall_9.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #9</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('wall_10.jpg', 'Wall Rug #10', 'Wall/Floor Rugs')">
-        <img src="wall_10.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #10</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_11.jpg', 'Wall Rug #11', 'Wall/Floor Rugs')">
-        <img src="wall_11.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #11</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_12.jpg', 'Wall Rug #12', 'Wall/Floor Rugs')">
-        <img src="wall_12.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #12</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_13.jpg', 'Wall Rug #13', 'Wall/Floor Rugs')">
-        <img src="wall_13.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #13</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_14.jpg', 'Wall Rug #14', 'Wall/Floor Rugs')">
-        <img src="wall_14.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #14</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_15.jpg', 'Wall Rug #15', 'Wall/Floor Rugs')">
-        <img src="wall_15.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #15</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_16.jpg', 'Wall Rug #16', 'Wall/Floor Rugs')">
-        <img src="wall_16.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #16</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_17.jpg', 'Wall Rug #17', 'Wall/Floor Rugs')">
-        <img src="wall_17.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #17</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_18.jpg', 'Wall Rug #18', 'Wall/Floor Rugs')">
-        <img src="wall_18.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #18</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_19.jpg', 'Wall Rug #19', 'Wall/Floor Rugs')">
-        <img src="wall_19.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #19</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_20.jpg', 'Wall Rug #20', 'Wall/Floor Rugs')">
-        <img src="wall_20.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #20</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_21.jpg', 'Wall Rug #21', 'Wall/Floor Rugs')">
-        <img src="wall_21.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #21</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_22.jpg', 'Wall Rug #22', 'Wall/Floor Rugs')">
-        <img src="wall_22.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #22</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_23.jpg', 'Wall Rug #23', 'Wall/Floor Rugs')">
-        <img src="wall_23.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #23</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_24.jpg', 'Wall Rug #24', 'Wall/Floor Rugs')">
-        <img src="wall_24.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #24</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_25.jpg', 'Wall Rug #25', 'Wall/Floor Rugs')">
-        <img src="wall_25.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #25</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_26.jpg', 'Wall Rug #26', 'Wall/Floor Rugs')">
-        <img src="wall_26.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #26</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_27.jpg', 'Wall Rug #27', 'Wall/Floor Rugs')">
-        <img src="wall_27.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #27</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_28.jpg', 'Wall Rug #28', 'Wall/Floor Rugs')">
-        <img src="wall_28.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #28</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_29.jpg', 'Wall Rug #29', 'Wall/Floor Rugs')">
-        <img src="wall_29.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #29</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_30.jpg', 'Wall Rug #30', 'Wall/Floor Rugs')">
-        <img src="wall_30.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #30</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_31.jpg', 'Wall Rug #31', 'Wall/Floor Rugs')">
-        <img src="wall_31.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #31</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_32.jpg', 'Wall Rug #32', 'Wall/Floor Rugs')">
-        <img src="wall_32.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #32</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_33.jpg', 'Wall Rug #33', 'Wall/Floor Rugs')">
-        <img src="wall_33.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #33</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_34.jpg', 'Wall Rug #34', 'Wall/Floor Rugs')">
-        <img src="wall_34.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #34</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_35.jpg', 'Wall Rug #35', 'Wall/Floor Rugs')">
-        <img src="wall_35.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #35</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_36.jpg', 'Wall Rug #36', 'Wall/Floor Rugs')">
-        <img src="wall_36.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #36</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_37.jpg', 'Wall Rug #37', 'Wall/Floor Rugs')">
-        <img src="wall_37.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #37</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_38.jpg', 'Wall Rug #38', 'Wall/Floor Rugs')">
-        <img src="wall_38.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #38</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_39.jpg', 'Wall Rug #39', 'Wall/Floor Rugs')">
-        <img src="wall_39.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #39</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_40.jpg', 'Wall Rug #40', 'Wall/Floor Rugs')">
-        <img src="wall_40.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #40</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_41.jpg', 'Wall Rug #41', 'Wall/Floor Rugs')">
-        <img src="wall_41.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #41</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_42.jpg', 'Wall Rug #42', 'Wall/Floor Rugs')">
-        <img src="wall_42.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #42</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_43.jpg', 'Wall Rug #43', 'Wall/Floor Rugs')">
-        <img src="wall_43.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #43</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_44.jpg', 'Wall Rug #44', 'Wall/Floor Rugs')">
-        <img src="wall_44.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #44</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_45.jpg', 'Wall Rug #45', 'Wall/Floor Rugs')">
-        <img src="wall_45.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #45</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_46.jpg', 'Wall Rug #46', 'Wall/Floor Rugs')">
-        <img src="wall_46.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #46</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_47.jpg', 'Wall Rug #47', 'Wall/Floor Rugs')">
-        <img src="wall_47.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #47</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_48.jpg', 'Wall Rug #48', 'Wall/Floor Rugs')">
-        <img src="wall_48.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #48</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_49.jpg', 'Wall Rug #49', 'Wall/Floor Rugs')">
-        <img src="wall_49.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #49</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_50.jpg', 'Wall Rug #50', 'Wall/Floor Rugs')">
-        <img src="wall_50.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #50</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_51.jpg', 'Wall Rug #51', 'Wall/Floor Rugs')">
-        <img src="wall_51.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #51</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_52.jpg', 'Wall Rug #52', 'Wall/Floor Rugs')">
-        <img src="wall_52.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #52</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_53.jpg', 'Wall Rug #53', 'Wall/Floor Rugs')">
-        <img src="wall_53.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #53</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_54.jpg', 'Wall Rug #54', 'Wall/Floor Rugs')">
-        <img src="wall_54.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #54</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_55.jpg', 'Wall Rug #55', 'Wall/Floor Rugs')">
-        <img src="wall_55.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #55</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_56.jpg', 'Wall Rug #56', 'Wall/Floor Rugs')">
-        <img src="wall_56.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #56</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_57.jpg', 'Wall Rug #57', 'Wall/Floor Rugs')">
-        <img src="wall_57.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #57</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_58.jpg', 'Wall Rug #58', 'Wall/Floor Rugs')">
-        <img src="wall_58.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #58</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_59.jpg', 'Wall Rug #59', 'Wall/Floor Rugs')">
-        <img src="wall_59.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #59</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_60.jpg', 'Wall Rug #60', 'Wall/Floor Rugs')">
-        <img src="wall_60.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #60</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_61.jpg', 'Wall Rug #61', 'Wall/Floor Rugs')">
-        <img src="wall_61.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #61</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_62.jpg', 'Wall Rug #62', 'Wall/Floor Rugs')">
-        <img src="wall_62.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #62</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_63.jpg', 'Wall Rug #63', 'Wall/Floor Rugs')">
-        <img src="wall_63.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #63</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_64.jpg', 'Wall Rug #64', 'Wall/Floor Rugs')">
-        <img src="wall_64.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #64</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_65.jpg', 'Wall Rug #65', 'Wall/Floor Rugs')">
-        <img src="wall_65.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #65</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_66.jpg', 'Wall Rug #66', 'Wall/Floor Rugs')">
-        <img src="wall_66.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #66</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_67.jpg', 'Wall Rug #67', 'Wall/Floor Rugs')">
-        <img src="wall_67.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #67</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_68.jpg', 'Wall Rug #68', 'Wall/Floor Rugs')">
-        <img src="wall_68.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #68</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_69.jpg', 'Wall Rug #69', 'Wall/Floor Rugs')">
-        <img src="wall_69.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #69</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_70.jpg', 'Wall Rug #70', 'Wall/Floor Rugs')">
-        <img src="wall_70.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #70</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_71.jpg', 'Wall Rug #71', 'Wall/Floor Rugs')">
-        <img src="wall_71.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #71</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_72.jpg', 'Wall Rug #72', 'Wall/Floor Rugs')">
-        <img src="wall_72.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #72</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_73.jpg', 'Wall Rug #73', 'Wall/Floor Rugs')">
-        <img src="wall_73.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #73</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_74.jpg', 'Wall Rug #74', 'Wall/Floor Rugs')">
-        <img src="wall_74.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #74</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_75.jpg', 'Wall Rug #75', 'Wall/Floor Rugs')">
-        <img src="wall_75.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #75</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_76.jpg', 'Wall Rug #76', 'Wall/Floor Rugs')">
-        <img src="wall_76.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #76</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_77.jpg', 'Wall Rug #77', 'Wall/Floor Rugs')">
-        <img src="wall_77.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #77</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_78.jpg', 'Wall Rug #78', 'Wall/Floor Rugs')">
-        <img src="wall_78.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #78</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_79.jpg', 'Wall Rug #79', 'Wall/Floor Rugs')">
-        <img src="wall_79.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #79</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_80.jpg', 'Wall Rug #80', 'Wall/Floor Rugs')">
-        <img src="wall_80.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #80</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('wall_81.jpg', 'Wall Rug #81', 'Wall/Floor Rugs')">
-        <img src="wall_81.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">PopArt #81</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_82.jpg', 'Wall Rug #82', 'Wall/Floor Rugs')">
-        <img src="wall_82.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #82</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_83.jpg', 'Wall Rug #83', 'Wall/Floor Rugs')">
-        <img src="wall_83.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #83</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_84.jpg', 'Wall Rug #84', 'Wall/Floor Rugs')">
-        <img src="wall_84.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #84</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_85.jpg', 'Wall Rug #85', 'Wall/Floor Rugs')">
-        <img src="wall_85.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #85</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_86.jpg', 'Wall Rug #86', 'Wall/Floor Rugs')">
-        <img src="wall_86.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #86</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_87.jpg', 'Wall Rug #87', 'Wall/Floor Rugs')">
-        <img src="wall_87.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #87</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('wall_88.jpg', 'Wall Rug #88', 'Wall/Floor Rugs')">
-        <img src="wall_88.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">PopArt #88</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_89.jpg', 'Wall Rug #89', 'Wall/Floor Rugs')">
-        <img src="wall_89.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #89</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_90.jpg', 'Wall Rug #90', 'Wall/Floor Rugs')">
-        <img src="wall_90.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #90</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_91.jpg', 'Wall Rug #91', 'Wall/Floor Rugs')">
-        <img src="wall_91.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #91</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('wall_92.jpg', 'Wall Rug #92', 'Wall/Floor Rugs')">
-        <img src="wall_92.jpg" alt="Wall Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">PopArt #92</div>
-      </div>
-
+      <!-- Dynamically rendered on navigation -->
     </div>
   </section>
 
@@ -4059,325 +2653,7 @@
   <section id="abstract-section" class="category-section">
     <h2 class="section-title">Abstract</h2>
     <div class="gallery-container">
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_1.jpg', 'Abstract Rug #1', 'Abstract Rugs')">
-        <img src="abs_1.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #1</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_2.jpg', 'Abstract Rug #2', 'Abstract Rugs')">
-        <img src="abs_2.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #2</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_3.jpg', 'Abstract Rug #3', 'Abstract Rugs')">
-        <img src="abs_3.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #3</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_4.jpg', 'Abstract Rug #4', 'Abstract Rugs')">
-        <img src="abs_4.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #4</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_5.jpg', 'Abstract Rug #5', 'Abstract Rugs')">
-        <img src="abs_5.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #5</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_6.jpg', 'Abstract Rug #6', 'Abstract Rugs')">
-        <img src="abs_6.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #6</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_7.jpg', 'Abstract Rug #7', 'Abstract Rugs')">
-        <img src="abs_7.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #7</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_8.jpg', 'Abstract Rug #8', 'Abstract Rugs')">
-        <img src="abs_8.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #8</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_9.jpg', 'Abstract Rug #9', 'Abstract Rugs')">
-        <img src="abs_9.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #9</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_10.jpg', 'Abstract Rug #10', 'Abstract Rugs')">
-        <img src="abs_10.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #10</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_11.jpg', 'Abstract Rug #11', 'Abstract Rugs')">
-        <img src="abs_11.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #11</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_12.jpg', 'Abstract Rug #12', 'Abstract Rugs')">
-        <img src="abs_12.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #12</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_13.jpg', 'Abstract Rug #13', 'Abstract Rugs')">
-        <img src="abs_13.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #13</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_14.jpg', 'Abstract Rug #14', 'Abstract Rugs')">
-        <img src="abs_14.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #14</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_15.jpg', 'Abstract Rug #15', 'Abstract Rugs')">
-        <img src="abs_15.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #15</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_16.jpg', 'Abstract Rug #16', 'Abstract Rugs')">
-        <img src="abs_16.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #16</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_17.jpg', 'Abstract Rug #17', 'Abstract Rugs')">
-        <img src="abs_17.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #17</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_18.jpg', 'Abstract Rug #18', 'Abstract Rugs')">
-        <img src="abs_18.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #18</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_19.jpg', 'Abstract Rug #19', 'Abstract Rugs')">
-        <img src="abs_19.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #19</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_20.jpg', 'Abstract Rug #20', 'Abstract Rugs')">
-        <img src="abs_20.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #20</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_21.jpg', 'Abstract Rug #21', 'Abstract Rugs')">
-        <img src="abs_21.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #21</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_22.jpg', 'Abstract Rug #22', 'Abstract Rugs')">
-        <img src="abs_22.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #22</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_23.jpg', 'Abstract Rug #23', 'Abstract Rugs')">
-        <img src="abs_23.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #23</div>
-      </div>
-      
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_24.jpg', 'Abstract Rug #24', 'Abstract Rugs')">
-        <img src="abs_24.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #24</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_25.jpg', 'Abstract Rug #25', 'Abstract Rugs')">
-        <img src="abs_25.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #25</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_26.jpg', 'Abstract Rug #26', 'Abstract Rugs')">
-        <img src="abs_26.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #26</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_27.jpg', 'Abstract Rug #27', 'Abstract Rugs')">
-        <img src="abs_27.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #27</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_28.jpg', 'Abstract Rug #28', 'Abstract Rugs')">
-        <img src="abs_28.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #28</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_29.jpg', 'Abstract Rug #29', 'Abstract Rugs')">
-        <img src="abs_29.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #29</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_30.jpg', 'Abstract Rug #30', 'Abstract Rugs')">
-        <img src="abs_30.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #30</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_31.jpg', 'Abstract Rug #31', 'Abstract Rugs')">
-        <img src="abs_31.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #31</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_32.jpg', 'Abstract Rug #32', 'Abstract Rugs')">
-        <img src="abs_32.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #32</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_33.jpg', 'Abstract Rug #33', 'Abstract Rugs')">
-        <img src="abs_33.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #33</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_34.jpg', 'Abstract Rug #34', 'Abstract Rugs')">
-        <img src="abs_34.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #34</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_35.jpg', 'Abstract Rug #35', 'Abstract Rugs')">
-        <img src="abs_35.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #35</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_36.jpg', 'Abstract Rug #36', 'Abstract Rugs')">
-        <img src="abs_36.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #36</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_37.jpg', 'Abstract Rug #37', 'Abstract Rugs')">
-        <img src="abs_37.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #37</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_38.jpg', 'Abstract Rug #38', 'Abstract Rugs')">
-        <img src="abs_38.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #38</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_39.jpg', 'Abstract Rug #39', 'Abstract Rugs')">
-        <img src="abs_39.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #39</div>
-      </div>
-
-      <div class="art-card" data-price="180" onclick="openLightbox('abs_40.jpg', 'Abstract Rug #40', 'Abstract Rugs')">
-        <img src="abs_40.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$180 USD</div>
-        <div class="card-tag">Abstract #40</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_41.jpg', 'Abstract Rug #41', 'Abstract Rugs')">
-        <img src="abs_41.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #41</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_42.jpg', 'Abstract Rug #42', 'Abstract Rugs')">
-        <img src="abs_42.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #42</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_43.jpg', 'Abstract Rug #43', 'Abstract Rugs')">
-        <img src="abs_43.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #43</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_44.jpg', 'Abstract Rug #44', 'Abstract Rugs')">
-        <img src="abs_44.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #44</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_45.jpg', 'Abstract Rug #45', 'Abstract Rugs')">
-        <img src="abs_45.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #45</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_46.jpg', 'Abstract Rug #46', 'Abstract Rugs')">
-        <img src="abs_46.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #46</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_47.jpg', 'Abstract Rug #47', 'Abstract Rugs')">
-        <img src="abs_47.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #47</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_48.jpg', 'Abstract Rug #48', 'Abstract Rugs')">
-        <img src="abs_48.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #48</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_49.jpg', 'Abstract Rug #49', 'Abstract Rugs')">
-        <img src="abs_49.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #49</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_50.jpg', 'Abstract Rug #50', 'Abstract Rugs')">
-        <img src="abs_50.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #50</div>
-      </div>
-
-      <div class="art-card card-tall" data-price="390" onclick="openLightbox('abs_51.jpg', 'Abstract Rug #51', 'Abstract Rugs')">
-        <img src="abs_51.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #51</div>
-      </div>
-
-      <div class="art-card card-big" data-price="420" onclick="openLightbox('abs_52.jpg', 'Abstract Rug #52', 'Abstract Rugs')">
-        <img src="abs_52.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$420 USD</div>
-        <div class="card-tag">Abstract #52</div>
-      </div>
-
-      <div class="art-card card-wide" data-price="390" onclick="openLightbox('abs_53.jpg', 'Abstract Rug #53', 'Abstract Rugs')">
-        <img src="abs_53.jpg" alt="Abstract Rug" loading="lazy">
-        <div class="card-price">$390 USD</div>
-        <div class="card-tag">Abstract #53</div>
-      </div>
-
+      <!-- Dynamically rendered on navigation -->
     </div>
   </section>
 
@@ -4394,7 +2670,7 @@
   <div class="nav-container">
     <button class="nav-btn active" onclick="showSection('featured', this)">FEATURED</button>
     <button class="nav-btn" onclick="showSection('gospel', this)">Gospel</button>
-    <button class="nav-btn" onclick="showSection('keyboard', this)">Keyboard</button>
+    <button class="nav-btn" onclick="showSection('pets', this)">PETS</button>
     <button class="nav-btn" onclick="showSection('wall', this)">Pop Art</button>
     <button class="nav-btn" onclick="showSection('abstract', this)">Abstract</button>
   </div>
@@ -4536,28 +2812,6 @@
           </p>
 
           <!-- Keyboard-Specific Options -->
-          <div id="keyboard-options" style="display: none;">
-            <div class="keyboard-size-selector">
-              <h4 data-i18n="lightbox.step1.keyboardSizeLabel">Select Keyboard Size:</h4>
-              <label>
-                <input type="radio" name="kb-size" value="60" data-price="75">
-                60%-65% ($75 USD)
-              </label>
-              <label>
-                <input type="radio" name="kb-size" value="75" data-price="80">
-                75%-80% ($80 USD)
-              </label>
-              <label>
-                <input type="radio" name="kb-size" value="100" data-price="85">
-                100% ($85 USD)
-              </label>
-            </div>
-            <!-- Next Button for Keyboard Size -->
-            <button id="keyboard-next-btn" onclick="proceedToStep2FromSizeSelection();" class="next-btn" style="display: none; width: 100%; background: var(--w-dark); color: var(--w-yellow); border: 3px solid var(--w-dark); padding: 15px; font-size: 1rem; font-weight: bold; font-family: 'Righteous', cursive; cursor: pointer; text-transform: uppercase; margin-top: 20px;" data-i18n="lightbox.step1.nextBtn">
-              NEXT: SELECT CURRENCY →
-            </button>
-          </div>
-
           <!-- General Rug Size Options (Gospel & Wall Rugs) -->
           <div id="rug-size-options" style="display: none;">
             <div class="rug-size-selector">
@@ -4693,8 +2947,7 @@
             </div>
           </div>
 
-          <!-- Hidden pricing divs (kept for backwards compatibility with openLightbox function) -->
-          <div class="keyboard-pricing" id="keyboard-pricing" style="display: none;"></div>
+          <!-- Hidden pricing div (kept for backwards compatibility with openLightbox function) -->
           <div class="rug-pricing" id="rug-pricing" style="display: none;"></div>
 
           <div class="payment-buttons" id="payment-buttons">
@@ -4979,13 +3232,16 @@
       }
 
       if (orderData && orderData.priceUSD > 0) {
-        if (orderData.isKeyboard && typeof updatePricing === 'function') {
-          updatePricing(orderData.priceUSD);
-        } else if (typeof updateRugPricing === 'function') {
+        if (typeof updateRugPricing === 'function') {
           updateRugPricing(orderData.priceUSD);
         }
       }
     }
+
+    // Update "Show More" buttons
+    document.querySelectorAll('.show-more-btn').forEach(btn => {
+      btn.textContent = t('gallery.showMore');
+    });
 
     const orderFormLang = document.getElementById('form-language');
     const contactFormLang = document.getElementById('contact-form-language');
@@ -5002,7 +3258,6 @@
   const lightboxDescription = document.getElementById('lightbox-description');
   const paymentButtons = document.getElementById('payment-buttons');
   const heroButtons = document.getElementById('hero-buttons');
-  const keyboardOptions = document.getElementById('keyboard-options');
 
   // Mobile state management
   let isMobileImageView = true;
@@ -5018,7 +3273,6 @@
     currency: 'USD',
     priceUSD: 0,
     priceConverted: 0,
-    isKeyboard: false,
     // Country detection and shipping
     detectedCountry: null,      // e.g., 'CO', 'US', 'GB'
     shippingTier: null,         // 'free', 'latinAmerica', 'europe'
@@ -5162,10 +3416,7 @@
     const countryCode = inferCountryFromCurrency(orderData.currency);
     orderData.detectedCountry = countryCode;
     orderData.shippingTier = getShippingTierForCountry(countryCode);
-    orderData.shippingFeeUSD = calculateShippingFee(
-      orderData.shippingTier,
-      orderData.isKeyboard
-    );
+    orderData.shippingFeeUSD = calculateShippingFee(orderData.shippingTier);
 
     // Convert to selected currency and calculate grand total
     updateShippingCalculations();
@@ -5237,13 +3488,11 @@
 
   // Validate and Proceed to Step 2 from Size Selection
   function proceedToStep2FromSizeSelection() {
-    // Check if a keyboard size is selected
-    const selectedKeyboardSize = document.querySelector('input[name="kb-size"]:checked');
     // Check if a rug size is selected
     const selectedRugSize = document.querySelector('input[name="rug-size"]:checked');
 
-    // If neither is selected, show error message
-    if (!selectedKeyboardSize && !selectedRugSize) {
+    // If no size is selected, show error message
+    if (!selectedRugSize) {
       alert(t('messages.selectSizeFirst'));
       return;
     }
@@ -5287,10 +3536,7 @@
     const countryCode = inferCountryFromCurrency(orderData.currency);
     orderData.detectedCountry = countryCode;
     orderData.shippingTier = getShippingTierForCountry(countryCode);
-    orderData.shippingFeeUSD = calculateShippingFee(
-      orderData.shippingTier,
-      orderData.isKeyboard
-    );
+    orderData.shippingFeeUSD = calculateShippingFee(orderData.shippingTier);
 
     // Convert to selected currency and calculate grand total
     updateShippingCalculations();
@@ -5758,16 +4004,12 @@
     // Store order data
     orderData.productName = title;
     orderData.category = category;
-    orderData.isKeyboard = category.toLowerCase().includes('keyboard');
 
     // Initialize shipping based on default USD currency
     const countryCode = inferCountryFromCurrency(orderData.currency);
     orderData.detectedCountry = countryCode;
     orderData.shippingTier = getShippingTierForCountry(countryCode);
-    orderData.shippingFeeUSD = calculateShippingFee(
-      orderData.shippingTier,
-      orderData.isKeyboard
-    );
+    orderData.shippingFeeUSD = calculateShippingFee(orderData.shippingTier);
     updateShippingCalculations();
 
     lightboxImage.src = imageSrc;
@@ -5801,24 +4043,18 @@
       }
     });
 
-    // Detect keyboard category
-    const isKeyboard = category.toLowerCase().includes('keyboard');
-
     const rugSizeOptions = document.getElementById('rug-size-options');
     const currencySelector = document.getElementById('currency-selector');
 
-    // Get pricing divs
-    const keyboardPricing = document.getElementById('keyboard-pricing');
+    // Get pricing div
     const rugPricing = document.getElementById('rug-pricing');
 
     if (isHero) {
       // Hero section logic
       paymentButtons.style.display = 'none';
       heroButtons.style.display = 'grid';
-      keyboardOptions.style.display = 'none';
       rugSizeOptions.style.display = 'none';
       currencySelector.style.display = 'none';  // Hide currency selector for hero
-      keyboardPricing.style.display = 'none';
       rugPricing.style.display = 'none';
 
       // Hide step UI elements for clean hero lightbox
@@ -5830,15 +4066,6 @@
       if (step4Title) step4Title.style.display = 'none';
       if (orderSummary) orderSummary.style.display = 'none';
 
-    } else if (isKeyboard) {
-      // Keyboard-specific lightbox
-      paymentButtons.style.display = 'grid';
-      heroButtons.style.display = 'none';
-      keyboardOptions.style.display = 'block';
-      rugSizeOptions.style.display = 'none';  // Hide rug size selector for keyboards
-      rugPricing.style.display = 'none';  // Hide rug pricing
-      disablePaymentButtons();
-      resetKeyboardOptions();
     } else {
       // Standard lightbox (Gospel, Wall/Floor)
       const isGospel = category.toLowerCase().includes('gospel');
@@ -5848,8 +4075,6 @@
 
       paymentButtons.style.display = 'grid';
       heroButtons.style.display = 'none';
-      keyboardOptions.style.display = 'none';  // Hide keyboard selector
-      keyboardPricing.style.display = 'none';  // Hide keyboard pricing
 
       // Show rug size selector for Gospel and Wall rugs
       if (hasRugSizes) {
@@ -5951,10 +4176,8 @@
     const dotsContainer = document.getElementById('carousel-dots');
     if (dotsContainer) dotsContainer.style.display = 'none';
 
-    // Hide Next buttons in Step 1
-    const keyboardNextBtn = document.getElementById('keyboard-next-btn');
+    // Hide Next button in Step 1
     const rugNextBtn = document.getElementById('rug-next-btn');
-    if (keyboardNextBtn) keyboardNextBtn.style.display = 'none';
     if (rugNextBtn) rugNextBtn.style.display = 'none';
 
     // Reset step state
@@ -6333,75 +4556,6 @@
     });
   }
 
-  // Reset keyboard options
-  function resetKeyboardOptions() {
-    const radios = document.querySelectorAll('input[name="kb-size"]');
-    radios.forEach(radio => radio.checked = false);
-
-    const pricingDiv = document.getElementById('keyboard-pricing');
-    pricingDiv.innerHTML = `<p><strong>${t('messages.selectSizePricing')}</strong></p>`;
-    pricingDiv.style.display = 'none';
-
-    // Reset and hide currency selector
-    const currencySelector = document.getElementById('currency-selector');
-    currencySelector.style.display = 'none';
-  }
-
-  // Update pricing display for keyboards
-  function updatePricing(priceUSD) {
-    const pricingDiv = document.getElementById('keyboard-pricing');
-    const rugPricingDiv = document.getElementById('rug-pricing');
-    const currencySelector = document.getElementById('currency-selector');
-
-    // Show currency selector and keyboard pricing, hide rug pricing
-    currencySelector.style.display = 'block';
-    pricingDiv.style.display = 'block';
-    rugPricingDiv.style.display = 'none';  // Hide rug pricing
-
-    // Get selected currency from dropdown
-    const currencyDropdown = document.getElementById('currency-dropdown');
-    const selectedCurrency = currencyDropdown ? currencyDropdown.value : 'USD';
-    currentSelectedCurrency = selectedCurrency;
-
-    // Convert prices (keyboard shipping fees are $25/$50, different from Gospel/Wall)
-    const keyboardPrice = convertPrice(priceUSD, selectedCurrency);
-    const shipping1 = convertPrice(25, selectedCurrency); // Latin America & US
-    const shipping2 = convertPrice(50, selectedCurrency); // Europe & Australia
-
-    // Use translations for messages
-    const shippingMessage = t('messages.shippingTime');
-    const godBlessMessage = t('messages.godBless');
-
-    pricingDiv.innerHTML = `
-      <p style="line-height: 1.8;">
-        ${shippingMessage}<br>
-        <strong>${godBlessMessage}</strong>
-      </p>
-    `;
-  }
-
-  // Handle size selection
-  document.querySelectorAll('input[name="kb-size"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-      const price = parseFloat(this.dataset.price);
-
-      // Store selection in orderData
-      orderData.priceUSD = price;
-      orderData.size = this.value;
-      orderData.sizeLabel = this.closest('label').textContent.trim();
-
-      updatePricing(price);
-
-      // Show Next button
-      const keyboardNextBtn = document.getElementById('keyboard-next-btn');
-      if (keyboardNextBtn) keyboardNextBtn.style.display = 'block';
-
-      // Advance to currency step and show price preview
-      advanceToStep(2);
-      updatePricePreview();
-    });
-  });
-
   // General Rug Size Selector Functions (Gospel & Wall Rugs)
   let currentRugBasePrice = 0;
   let currentCardType = 'standard';
@@ -6545,11 +4699,11 @@
     return 'latinAmerica'; // Default
   }
 
-  function calculateShippingFee(shippingTier, isKeyboard) {
+  function calculateShippingFee(shippingTier) {
     const fees = {
       'free': 0,
-      'latinAmerica': isKeyboard ? 25 : 30,
-      'europe': isKeyboard ? 50 : 80
+      'latinAmerica': 30,
+      'europe': 80
     };
     return shippingTier in fees ? fees[shippingTier] : fees['latinAmerica'];
   }
@@ -6567,13 +4721,11 @@
 
   function updateRugPricing(priceUSD) {
     const pricingDiv = document.getElementById('rug-pricing');
-    const keyboardPricingDiv = document.getElementById('keyboard-pricing');
     const currencySelector = document.getElementById('currency-selector');
 
-    // Show currency selector and rug pricing, hide keyboard pricing
+    // Show currency selector and rug pricing
     currencySelector.style.display = 'block';
     pricingDiv.style.display = 'block';
-    keyboardPricingDiv.style.display = 'none';  // Hide keyboard pricing
 
     // Get selected currency from dropdown
     const currencyDropdown = document.getElementById('currency-dropdown');
@@ -6609,13 +4761,6 @@
         updateRugPricing(price);
       }
 
-      // Re-update pricing with new currency for keyboards
-      const selectedKeyboardSize = document.querySelector('input[name="kb-size"]:checked');
-      if (selectedKeyboardSize) {
-        const price = selectedKeyboardSize.dataset.price;
-        updatePricing(price);
-      }
-
       // Update shipping and price preview (will handle currency update and shipping recalculation)
       updatePricePreview();
     }
@@ -6648,10 +4793,7 @@
       const countryCode = inferCountryFromCurrency(orderData.currency);
       orderData.detectedCountry = countryCode;
       orderData.shippingTier = getShippingTierForCountry(countryCode);
-      orderData.shippingFeeUSD = calculateShippingFee(
-        orderData.shippingTier,
-        orderData.isKeyboard
-      );
+      orderData.shippingFeeUSD = calculateShippingFee(orderData.shippingTier);
 
       // Update shipping calculations (convert to selected currency and calculate grand total)
       updateShippingCalculations();
@@ -6800,6 +4942,17 @@
     if (targetSection) {
       targetSection.classList.add('active');
 
+      // On-demand rendering for paginated sections
+      const paginatedSections = ['gospel', 'wall', 'abstract'];
+      if (paginatedSections.includes(sectionName)) {
+        const state = sectionState[sectionName];
+
+        // Render first batch if section hasn't been rendered yet
+        if (state.renderedBatches === 0) {
+          renderBatch(sectionName, 0);
+        }
+      }
+
       // Scroll to the top of the section with offset for fixed header
       setTimeout(() => {
         const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset;
@@ -6936,12 +5089,400 @@
     exitFullScreen();
   });
 
+
+  // ========== IMAGE DATA FOR PAGINATION ==========
+  const imageData = {
+    gospel: [
+      { img: 'maingrid_1.jpg', title: 'Gospel Rug #1', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_2.jpg', title: 'Gospel Rug #2', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_3.jpg', title: 'Gospel Rug #3', price: 180, cardClass: '' },
+      { img: 'maingrid_4.jpg', title: 'Gospel Rug #4', price: 180, cardClass: '' },
+      { img: 'maingrid_5.jpg', title: 'Gospel Rug #5', price: 420, cardClass: 'card-big' },
+      { img: 'maingrid_6.jpg', title: 'Gospel Rug #6', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_7.jpg', title: 'Gospel Rug #7', price: 180, cardClass: '' },
+      { img: 'maingrid_8.jpg', title: 'Gospel Rug #8', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_9.jpg', title: 'Gospel Rug #9', price: 180, cardClass: '' },
+      { img: 'maingrid_10.jpg', title: 'Gospel Rug #10', price: 180, cardClass: '' },
+      { img: 'maingrid_11.jpg', title: 'Gospel Rug #11', price: 180, cardClass: '' },
+      { img: 'maingrid_12.jpg', title: 'Gospel Rug #12', price: 180, cardClass: '' },
+      { img: 'maingrid_13.jpg', title: 'Gospel Rug #13', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_14.jpg', title: 'Gospel Rug #14', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_15.jpg', title: 'Gospel Rug #15', price: 180, cardClass: '' },
+      { img: 'maingrid_16.jpg', title: 'Gospel Rug #16', price: 180, cardClass: '' },
+      { img: 'maingrid_17.jpg', title: 'Gospel Rug #17', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_18.jpg', title: 'Gospel Rug #18', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_19.jpg', title: 'Gospel Rug #19', price: 180, cardClass: '' },
+      { img: 'maingrid_20.jpg', title: 'Gospel Rug #20', price: 180, cardClass: '' },
+      { img: 'maingrid_21.jpg', title: 'Gospel Rug #21', price: 420, cardClass: 'card-big' },
+      { img: 'maingrid_22.jpg', title: 'Gospel Rug #22', price: 180, cardClass: '' },
+      { img: 'maingrid_23.jpg', title: 'Gospel Rug #23', price: 180, cardClass: '' },
+      { img: 'maingrid_24.jpg', title: 'Gospel Rug #24', price: 180, cardClass: '' },
+      { img: 'maingrid_25.jpg', title: 'Gospel Rug #25', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_26.jpg', title: 'Gospel Rug #26', price: 180, cardClass: '' },
+      { img: 'maingrid_27.jpg', title: 'Gospel Rug #27', price: 180, cardClass: '' },
+      { img: 'maingrid_28.jpg', title: 'Gospel Rug #28', price: 180, cardClass: '' },
+      { img: 'maingrid_29.jpg', title: 'Gospel Rug #29', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_30.jpg', title: 'Gospel Rug #30', price: 180, cardClass: '' },
+      { img: 'maingrid_31.jpg', title: 'Gospel Rug #31', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_32.jpg', title: 'Gospel Rug #32', price: 180, cardClass: '' },
+      { img: 'maingrid_33.jpg', title: 'Gospel Rug #33', price: 180, cardClass: '' },
+      { img: 'maingrid_34.jpg', title: 'Gospel Rug #34', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_35.jpg', title: 'Gospel Rug #35', price: 420, cardClass: 'card-big' },
+      { img: 'maingrid_36.jpg', title: 'Gospel Rug #36', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_37.jpg', title: 'Gospel Rug #37', price: 180, cardClass: '' },
+      { img: 'maingrid_38.jpg', title: 'Gospel Rug #38', price: 180, cardClass: '' },
+      { img: 'maingrid_39.jpg', title: 'Gospel Rug #39', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_40.jpg', title: 'Gospel Rug #40', price: 180, cardClass: '' },
+      { img: 'maingrid_41.jpg', title: 'Gospel Rug #41', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_42.jpg', title: 'Gospel Rug #42', price: 180, cardClass: '' },
+      { img: 'maingrid_43.jpg', title: 'Gospel Rug #43', price: 180, cardClass: '' },
+      { img: 'maingrid_44.jpg', title: 'Gospel Rug #44', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_45.jpg', title: 'Gospel Rug #45', price: 180, cardClass: '' },
+      { img: 'maingrid_46.jpg', title: 'Gospel Rug #46', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_47.jpg', title: 'Gospel Rug #47', price: 180, cardClass: '' },
+      { img: 'maingrid_48.jpg', title: 'Gospel Rug #48', price: 180, cardClass: '' },
+      { img: 'maingrid_49.jpg', title: 'Gospel Rug #49', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_50.jpg', title: 'Gospel Rug #50', price: 180, cardClass: '' },
+      { img: 'maingrid_51.jpg', title: 'Gospel Rug #51', price: 420, cardClass: 'card-big' },
+      { img: 'maingrid_52.jpg', title: 'Gospel Rug #52', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_53.jpg', title: 'Gospel Rug #53', price: 180, cardClass: '' },
+      { img: 'maingrid_54.jpg', title: 'Gospel Rug #54', price: 180, cardClass: '' },
+      { img: 'maingrid_55.jpg', title: 'Gospel Rug #55', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_56.jpg', title: 'Gospel Rug #56', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_57.jpg', title: 'Gospel Rug #57', price: 180, cardClass: '' },
+      { img: 'maingrid_58.jpg', title: 'Gospel Rug #58', price: 180, cardClass: '' },
+      { img: 'maingrid_59.jpg', title: 'Gospel Rug #59', price: 180, cardClass: '' },
+      { img: 'maingrid_60.jpg', title: 'Gospel Rug #60', price: 390, cardClass: 'card-wide' },
+      { img: 'maingrid_61.jpg', title: 'Gospel Rug #61', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_62.jpg', title: 'Gospel Rug #62', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_63.jpg', title: 'Gospel Rug #63', price: 180, cardClass: '' },
+      { img: 'maingrid_64.jpg', title: 'Gospel Rug #64', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_65.jpg', title: 'Gospel Rug #65', price: 420, cardClass: 'card-big' },
+      { img: 'maingrid_66.jpg', title: 'Gospel Rug #66', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_67.jpg', title: 'Gospel Rug #67', price: 100, cardClass: 'card' },
+      { img: 'maingrid_68.jpg', title: 'Gospel Rug #68', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_69.jpg', title: 'Gospel Rug #69', price: 180, cardClass: '' },
+      { img: 'maingrid_70.jpg', title: 'Gospel Rug #70', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_71.jpg', title: 'Gospel Rug #71', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_72.jpg', title: 'Gospel Rug #72', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_73.jpg', title: 'Gospel Rug #73', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_74.jpg', title: 'Gospel Rug #74', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_75.jpg', title: 'Gospel Rug #75', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_76.jpg', title: 'Gospel Rug #76', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_77.jpg', title: 'Gospel Rug #77', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_78.jpg', title: 'Gospel Rug #78', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_79.jpg', title: 'Gospel Rug #79', price: 390, cardClass: 'card-tall' },
+      { img: 'maingrid_80.jpg', title: 'Gospel Rug #80', price: 390, cardClass: 'card-tall' }
+    ],
+    wall: [
+      { img: 'wall_1.jpg', title: 'Wall Rug #1', price: 390, cardClass: 'card-wide' },
+      { img: 'wall_2.jpg', title: 'Wall Rug #2', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_3.jpg', title: 'Wall Rug #3', price: 180, cardClass: '' },
+      { img: 'wall_4.jpg', title: 'Wall Rug #4', price: 180, cardClass: '' },
+      { img: 'wall_5.jpg', title: 'Wall Rug #5', price: 420, cardClass: 'card-big' },
+      { img: 'wall_6.jpg', title: 'Wall Rug #6', price: 390, cardClass: 'card-wide' },
+      { img: 'wall_7.jpg', title: 'Wall Rug #7', price: 180, cardClass: '' },
+      { img: 'wall_8.jpg', title: 'Wall Rug #8', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_9.jpg', title: 'Wall Rug #9', price: 180, cardClass: '' },
+      { img: 'wall_10.jpg', title: 'Wall Rug #10', price: 390, cardClass: 'card-wide' },
+      { img: 'wall_11.jpg', title: 'Wall Rug #11', price: 180, cardClass: '' },
+      { img: 'wall_12.jpg', title: 'Wall Rug #12', price: 180, cardClass: '' },
+      { img: 'wall_13.jpg', title: 'Wall Rug #13', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_14.jpg', title: 'Wall Rug #14', price: 420, cardClass: 'card-big' },
+      { img: 'wall_15.jpg', title: 'Wall Rug #15', price: 180, cardClass: '' },
+      { img: 'wall_16.jpg', title: 'Wall Rug #16', price: 180, cardClass: '' },
+      { img: 'wall_17.jpg', title: 'Wall Rug #17', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_18.jpg', title: 'Wall Rug #18', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_19.jpg', title: 'Wall Rug #19', price: 180, cardClass: '' },
+      { img: 'wall_20.jpg', title: 'Wall Rug #20', price: 180, cardClass: '' },
+      { img: 'wall_21.jpg', title: 'Wall Rug #21', price: 420, cardClass: 'card-big' },
+      { img: 'wall_22.jpg', title: 'Wall Rug #22', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_23.jpg', title: 'Wall Rug #23', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_24.jpg', title: 'Wall Rug #24', price: 180, cardClass: '' },
+      { img: 'wall_25.jpg', title: 'Wall Rug #25', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_26.jpg', title: 'Wall Rug #26', price: 180, cardClass: '' },
+      { img: 'wall_27.jpg', title: 'Wall Rug #27', price: 420, cardClass: 'card-big' },
+      { img: 'wall_28.jpg', title: 'Wall Rug #28', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_29.jpg', title: 'Wall Rug #29', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_30.jpg', title: 'Wall Rug #30', price: 180, cardClass: '' },
+      { img: 'wall_31.jpg', title: 'Wall Rug #31', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_32.jpg', title: 'Wall Rug #32', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_33.jpg', title: 'Wall Rug #33', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_34.jpg', title: 'Wall Rug #34', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_35.jpg', title: 'Wall Rug #35', price: 420, cardClass: 'card-big' },
+      { img: 'wall_36.jpg', title: 'Wall Rug #36', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_37.jpg', title: 'Wall Rug #37', price: 180, cardClass: '' },
+      { img: 'wall_38.jpg', title: 'Wall Rug #38', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_39.jpg', title: 'Wall Rug #39', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_40.jpg', title: 'Wall Rug #40', price: 420, cardClass: 'card-big' },
+      { img: 'wall_41.jpg', title: 'Wall Rug #41', price: 180, cardClass: '' },
+      { img: 'wall_42.jpg', title: 'Wall Rug #42', price: 180, cardClass: '' },
+      { img: 'wall_43.jpg', title: 'Wall Rug #43', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_44.jpg', title: 'Wall Rug #44', price: 420, cardClass: 'card-big' },
+      { img: 'wall_45.jpg', title: 'Wall Rug #45', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_46.jpg', title: 'Wall Rug #46', price: 180, cardClass: '' },
+      { img: 'wall_47.jpg', title: 'Wall Rug #47', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_48.jpg', title: 'Wall Rug #48', price: 420, cardClass: 'card-big' },
+      { img: 'wall_49.jpg', title: 'Wall Rug #49', price: 180, cardClass: '' },
+      { img: 'wall_50.jpg', title: 'Wall Rug #50', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_51.jpg', title: 'Wall Rug #51', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_52.jpg', title: 'Wall Rug #52', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_53.jpg', title: 'Wall Rug #53', price: 420, cardClass: 'card-big' },
+      { img: 'wall_54.jpg', title: 'Wall Rug #54', price: 180, cardClass: '' },
+      { img: 'wall_55.jpg', title: 'Wall Rug #55', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_56.jpg', title: 'Wall Rug #56', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_57.jpg', title: 'Wall Rug #57', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_58.jpg', title: 'Wall Rug #58', price: 180, cardClass: '' },
+      { img: 'wall_59.jpg', title: 'Wall Rug #59', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_60.jpg', title: 'Wall Rug #60', price: 420, cardClass: 'card-big' },
+      { img: 'wall_61.jpg', title: 'Wall Rug #61', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_62.jpg', title: 'Wall Rug #62', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_63.jpg', title: 'Wall Rug #63', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_64.jpg', title: 'Wall Rug #64', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_65.jpg', title: 'Wall Rug #65', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_66.jpg', title: 'Wall Rug #66', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_67.jpg', title: 'Wall Rug #67', price: 420, cardClass: 'card-big' },
+      { img: 'wall_68.jpg', title: 'Wall Rug #68', price: 180, cardClass: '' },
+      { img: 'wall_69.jpg', title: 'Wall Rug #69', price: 180, cardClass: '' },
+      { img: 'wall_70.jpg', title: 'Wall Rug #70', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_71.jpg', title: 'Wall Rug #71', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_72.jpg', title: 'Wall Rug #72', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_73.jpg', title: 'Wall Rug #73', price: 420, cardClass: 'card-big' },
+      { img: 'wall_74.jpg', title: 'Wall Rug #74', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_75.jpg', title: 'Wall Rug #75', price: 180, cardClass: '' },
+      { img: 'wall_76.jpg', title: 'Wall Rug #76', price: 180, cardClass: '' },
+      { img: 'wall_77.jpg', title: 'Wall Rug #77', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_78.jpg', title: 'Wall Rug #78', price: 420, cardClass: 'card-big' },
+      { img: 'wall_79.jpg', title: 'Wall Rug #79', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_80.jpg', title: 'Wall Rug #80', price: 180, cardClass: '' },
+      { img: 'wall_81.jpg', title: 'Wall Rug #81', price: 180, cardClass: '' },
+      { img: 'wall_82.jpg', title: 'Wall Rug #82', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_83.jpg', title: 'Wall Rug #83', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_84.jpg', title: 'Wall Rug #84', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_85.jpg', title: 'Wall Rug #85', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_86.jpg', title: 'Wall Rug #86', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_87.jpg', title: 'Wall Rug #87', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_88.jpg', title: 'Wall Rug #88', price: 420, cardClass: 'card-big' },
+      { img: 'wall_89.jpg', title: 'Wall Rug #89', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_90.jpg', title: 'Wall Rug #90', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_91.jpg', title: 'Wall Rug #91', price: 390, cardClass: 'card-tall' },
+      { img: 'wall_92.jpg', title: 'Wall Rug #92', price: 390, cardClass: 'card-tall' }
+    ],
+    abstract: [
+      { img: 'abs_1.jpg', title: 'Abstract Rug #1', price: 390, cardClass: 'card-wide' },
+      { img: 'abs_2.jpg', title: 'Abstract Rug #2', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_3.jpg', title: 'Abstract Rug #3', price: 180, cardClass: '' },
+      { img: 'abs_4.jpg', title: 'Abstract Rug #4', price: 180, cardClass: '' },
+      { img: 'abs_5.jpg', title: 'Abstract Rug #5', price: 420, cardClass: 'card-big' },
+      { img: 'abs_6.jpg', title: 'Abstract Rug #6', price: 390, cardClass: 'card-wide' },
+      { img: 'abs_7.jpg', title: 'Abstract Rug #7', price: 180, cardClass: '' },
+      { img: 'abs_8.jpg', title: 'Abstract Rug #8', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_9.jpg', title: 'Abstract Rug #9', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_10.jpg', title: 'Abstract Rug #10', price: 180, cardClass: '' },
+      { img: 'abs_11.jpg', title: 'Abstract Rug #11', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_12.jpg', title: 'Abstract Rug #12', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_13.jpg', title: 'Abstract Rug #13', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_14.jpg', title: 'Abstract Rug #14', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_15.jpg', title: 'Abstract Rug #15', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_16.jpg', title: 'Abstract Rug #16', price: 420, cardClass: 'card-big' },
+      { img: 'abs_17.jpg', title: 'Abstract Rug #17', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_18.jpg', title: 'Abstract Rug #18', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_19.jpg', title: 'Abstract Rug #19', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_20.jpg', title: 'Abstract Rug #20', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_21.jpg', title: 'Abstract Rug #21', price: 420, cardClass: 'card-big' },
+      { img: 'abs_22.jpg', title: 'Abstract Rug #22', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_23.jpg', title: 'Abstract Rug #23', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_24.jpg', title: 'Abstract Rug #24', price: 420, cardClass: 'card-big' },
+      { img: 'abs_25.jpg', title: 'Abstract Rug #25', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_26.jpg', title: 'Abstract Rug #26', price: 420, cardClass: 'card-big' },
+      { img: 'abs_27.jpg', title: 'Abstract Rug #27', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_28.jpg', title: 'Abstract Rug #28', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_29.jpg', title: 'Abstract Rug #29', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_30.jpg', title: 'Abstract Rug #30', price: 420, cardClass: 'card-big' },
+      { img: 'abs_31.jpg', title: 'Abstract Rug #31', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_32.jpg', title: 'Abstract Rug #32', price: 390, cardClass: 'card-wide' },
+      { img: 'abs_33.jpg', title: 'Abstract Rug #33', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_34.jpg', title: 'Abstract Rug #34', price: 180, cardClass: '' },
+      { img: 'abs_35.jpg', title: 'Abstract Rug #35', price: 180, cardClass: '' },
+      { img: 'abs_36.jpg', title: 'Abstract Rug #36', price: 420, cardClass: 'card-big' },
+      { img: 'abs_37.jpg', title: 'Abstract Rug #37', price: 390, cardClass: 'card-wide' },
+      { img: 'abs_38.jpg', title: 'Abstract Rug #38', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_39.jpg', title: 'Abstract Rug #39', price: 180, cardClass: '' },
+      { img: 'abs_40.jpg', title: 'Abstract Rug #40', price: 180, cardClass: '' },
+      { img: 'abs_41.jpg', title: 'Abstract Rug #41', price: 420, cardClass: 'card-big' },
+      { img: 'abs_42.jpg', title: 'Abstract Rug #42', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_43.jpg', title: 'Abstract Rug #43', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_44.jpg', title: 'Abstract Rug #44', price: 390, cardClass: 'card-wide' },
+      { img: 'abs_45.jpg', title: 'Abstract Rug #45', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_46.jpg', title: 'Abstract Rug #46', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_47.jpg', title: 'Abstract Rug #47', price: 420, cardClass: 'card-big' },
+      { img: 'abs_48.jpg', title: 'Abstract Rug #48', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_49.jpg', title: 'Abstract Rug #49', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_50.jpg', title: 'Abstract Rug #50', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_51.jpg', title: 'Abstract Rug #51', price: 390, cardClass: 'card-tall' },
+      { img: 'abs_52.jpg', title: 'Abstract Rug #52', price: 420, cardClass: 'card-big' },
+      { img: 'abs_53.jpg', title: 'Abstract Rug #53', price: 390, cardClass: 'card-wide' }
+    ]
+  };
+
+  // Batch configuration for pagination
+  const batchConfig = {
+    gospel: [30, 30, 20],   // 80 total: 30 + 30 + 20
+    wall: [30, 30, 32],     // 92 total: 30 + 30 + 32
+    abstract: [30, 23]      // 53 total: 30 + 23
+  };
+
+  // Track current batch state per section
+  const sectionState = {
+    gospel: { renderedBatches: 0 },
+    wall: { renderedBatches: 0 },
+    abstract: { renderedBatches: 0 }
+  };
+
+
+  // ========== INTERSECTION OBSERVER FOR LAZY LOADING ==========
+  let imageObserver = null;
+
+  function initImageObserver() {
+    if (imageObserver) return imageObserver;
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '500px',  // Load 500px before entering viewport
+      threshold: 0.01
+    };
+
+    imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            img.onload = () => img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        }
+      });
+    }, observerOptions);
+
+    return imageObserver;
+  }
+
+  function observeImages(container) {
+    const observer = initImageObserver();
+    const images = container.querySelectorAll('img[data-src]');
+    images.forEach(img => observer.observe(img));
+  }
+
+  // ========== DYNAMIC GALLERY RENDERING ==========
+  function generateArtCardHTML(imageObj, category) {
+    const { img, title, price, cardClass } = imageObj;
+    const cardClasses = `art-card ${cardClass || ''}`.trim();
+
+    const categoryLabels = {
+      gospel: 'Gospel Rugs',
+      wall: 'Wall/Floor Rugs',
+      abstract: 'Abstract Rugs'
+    };
+
+    return `
+      <div class="${cardClasses}" data-price="${price}" onclick="openLightbox('${img}', '${title}', '${categoryLabels[category]}')">
+        <img data-src="${img}" alt="${title}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23e0e0e0' width='300' height='300'/%3E%3C/svg%3E">
+        <div class="card-price">$${price} USD</div>
+        <div class="card-tag">${title.split('#')[0]}#${title.split('#')[1]}</div>
+      </div>
+    `;
+  }
+
+  function renderBatch(sectionName, batchIndex) {
+    const section = document.getElementById(`${sectionName}-section`);
+    if (!section) return;
+
+    const gallery = section.querySelector('.gallery-container');
+    if (!gallery) return;
+
+    const images = imageData[sectionName];
+    const batches = batchConfig[sectionName];
+
+    // Calculate batch boundaries
+    let startIdx = 0;
+    for (let i = 0; i < batchIndex; i++) {
+      startIdx += batches[i];
+    }
+    const endIdx = startIdx + batches[batchIndex];
+
+    // Generate and append HTML
+    const batchImages = images.slice(startIdx, endIdx);
+    const batchHTML = batchImages.map(img => generateArtCardHTML(img, sectionName)).join('');
+    gallery.insertAdjacentHTML('beforeend', batchHTML);
+
+    // Initialize Intersection Observer
+    observeImages(gallery);
+
+    // Update state and button
+    sectionState[sectionName].renderedBatches++;
+    updateShowMoreButton(sectionName);
+  }
+
+  function updateShowMoreButton(sectionName) {
+    const section = document.getElementById(`${sectionName}-section`);
+    if (!section) return;
+
+    const state = sectionState[sectionName];
+    const batches = batchConfig[sectionName];
+
+    let button = section.querySelector('.show-more-btn');
+
+    // Create button if needed
+    if (!button && state.renderedBatches < batches.length) {
+      const gallery = section.querySelector('.gallery-container');
+      button = document.createElement('button');
+      button.className = 'show-more-btn';
+      button.setAttribute('data-i18n', 'gallery.showMore');
+      button.textContent = t('gallery.showMore');
+      button.onclick = () => loadNextBatch(sectionName);
+      gallery.insertAdjacentElement('afterend', button);
+    }
+
+    // Hide when all batches loaded
+    if (button && state.renderedBatches >= batches.length) {
+      button.style.display = 'none';
+    }
+  }
+
+  function loadNextBatch(sectionName) {
+    const state = sectionState[sectionName];
+    const batches = batchConfig[sectionName];
+    const button = document.querySelector(`#${sectionName}-section .show-more-btn`);
+
+    // Prevent double-click
+    if (button) {
+      button.disabled = true;
+      button.textContent = '...';
+    }
+
+    if (state.renderedBatches < batches.length) {
+      renderBatch(sectionName, state.renderedBatches);
+
+      requestAnimationFrame(() => {
+        if (button) {
+          button.disabled = false;
+          button.textContent = t('gallery.showMore');
+        }
+      });
+    }
+  }
+
   // ========== TRANSLATIONS OBJECT ==========
   const translations = {
     en: {
       hero: {
         customRugLabel: "Order a Custom Rug Here",
         getStartedBtn: "Get Started ➔"
+      },
+      gallery: {
+        showMore: "Show More"
       },
       faq: {
         title: "Frequently Asked Questions",
@@ -7105,6 +5646,9 @@
         customRugLabel: "Ordena una Personalizada Aquí",
         getStartedBtn: "Comenzar ➔"
       },
+      gallery: {
+        showMore: "Ver Más"
+      },
       faq: {
         title: "Preguntas Frecuentes",
         items: [
@@ -7267,6 +5811,9 @@
         customRugLabel: "Commandez un Tapis Personnalisé Ici",
         getStartedBtn: "Commencer ➔"
       },
+      gallery: {
+        showMore: "Voir Plus"
+      },
       faq: {
         title: "Questions Fréquemment Posées",
         items: [
@@ -7428,6 +5975,9 @@
       hero: {
         customRugLabel: "Encomende um Personalizado Aqui",
         getStartedBtn: "Começar ➔"
+      },
+      gallery: {
+        showMore: "Ver Mais"
       },
       faq: {
         title: "Perguntas Frequentes",
