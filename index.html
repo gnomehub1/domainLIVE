@@ -515,14 +515,18 @@
     filter: saturate(0.8) contrast(1.1);
   }
 
-  /* Image lazy loading fade-in animation */
+  /* Image lazy loading with blur effect (pixelated miniatures) */
   .art-card img[data-src] {
-    opacity: 0;
-    transition: opacity 0.3s ease-in;
+    opacity: 1;
+    filter: blur(20px);
+    transform: scale(1.1);
+    transition: opacity 0.4s ease-in, filter 0.4s ease-in, transform 0.4s ease-in;
   }
 
   .art-card img.loaded {
     opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
   }
 
   /* Rotation Logic - Base rotation FIRST */
@@ -1278,8 +1282,8 @@
   }
 
   .pet-label-box {
-    background: var(--w-dark);
-    color: var(--w-yellow);
+    background: var(--w-yellow);
+    color: var(--w-dark);
     padding: 15px 25px;
     font-family: 'Righteous', cursive;
     font-size: 1.1rem;
@@ -1484,7 +1488,7 @@
     padding: 16px 40px;
     background: var(--w-dark);
     color: var(--w-yellow);
-    border: none;
+    border: 3px solid var(--w-dark);
     font-family: 'Kanit', sans-serif;
     font-size: 1.1rem;
     font-weight: 500;
@@ -2492,11 +2496,11 @@
 
   <!-- Hamburger Menu -->
   <nav class="hamburger-menu">
-    <a href="#" class="hamburger-menu-item active" onclick="showSection('featured', this); toggleHamburgerMenu(); return false;">Featured</a>
-    <a href="#" class="hamburger-menu-item" onclick="showSection('gospel', this); toggleHamburgerMenu(); return false;">Gospel</a>
-    <a href="#" class="hamburger-menu-item" onclick="showSection('pets', this); toggleHamburgerMenu(); return false;">Pets</a>
-    <a href="#" class="hamburger-menu-item" onclick="showSection('wall', this); toggleHamburgerMenu(); return false;">Pop Art</a>
-    <a href="#" class="hamburger-menu-item" onclick="showSection('abstract', this); toggleHamburgerMenu(); return false;">Abstract</a>
+    <a href="#" class="hamburger-menu-item active" data-i18n="sections.featured" onclick="showSection('featured', this); toggleHamburgerMenu(); return false;">Featured</a>
+    <a href="#" class="hamburger-menu-item" data-i18n="sections.gospel" onclick="showSection('gospel', this); toggleHamburgerMenu(); return false;">Gospel</a>
+    <a href="#" class="hamburger-menu-item" data-i18n="sections.popArt" onclick="showSection('wall', this); toggleHamburgerMenu(); return false;">Pop Art</a>
+    <a href="#" class="hamburger-menu-item" data-i18n="sections.abstract" onclick="showSection('abstract', this); toggleHamburgerMenu(); return false;">Abstract</a>
+    <a href="#" class="hamburger-menu-item" data-i18n="sections.pets" onclick="showSection('pets', this); toggleHamburgerMenu(); return false;">Pets</a>
   </nav>
 
   <!-- Instagram Icon in top-right corner -->
@@ -2565,7 +2569,7 @@
 
   <!-- GOSPEL RUGS SECTION -->
   <section id="gospel-section" class="category-section">
-    <h2 class="section-title">Gospel</h2>
+    <h2 class="section-title" data-i18n="sections.gospel">Gospel</h2>
     <div class="gallery-container">
       <!-- Dynamically rendered on navigation -->
     </div>
@@ -2573,7 +2577,7 @@
 
   <!-- PETS SECTION - Hero Grid Style -->
   <section id="pets-section" class="category-section">
-    <h2 class="section-title">Pets</h2>
+    <h2 class="section-title" data-i18n="sections.pets">Pets</h2>
 
     <!-- Use same hero-grid-container as FEATURED section -->
     <div class="hero-grid-container">
@@ -2643,7 +2647,7 @@
 
   <!-- WALL/FLOOR RUGS SECTION -->
   <section id="wall-section" class="category-section">
-    <h2 class="section-title">Pop Art</h2>
+    <h2 class="section-title" data-i18n="sections.popArt">Pop Art</h2>
     <div class="gallery-container">
       <!-- Dynamically rendered on navigation -->
     </div>
@@ -2651,7 +2655,7 @@
 
   <!-- ABSTRACT RUGS SECTION -->
   <section id="abstract-section" class="category-section">
-    <h2 class="section-title">Abstract</h2>
+    <h2 class="section-title" data-i18n="sections.abstract">Abstract</h2>
     <div class="gallery-container">
       <!-- Dynamically rendered on navigation -->
     </div>
@@ -2668,11 +2672,11 @@
   </div>
 
   <div class="nav-container">
-    <button class="nav-btn active" onclick="showSection('featured', this)">FEATURED</button>
-    <button class="nav-btn" onclick="showSection('gospel', this)">Gospel</button>
-    <button class="nav-btn" onclick="showSection('pets', this)">PETS</button>
-    <button class="nav-btn" onclick="showSection('wall', this)">Pop Art</button>
-    <button class="nav-btn" onclick="showSection('abstract', this)">Abstract</button>
+    <button class="nav-btn active" data-i18n="sections.featured" onclick="showSection('featured', this)">Featured</button>
+    <button class="nav-btn" data-i18n="sections.gospel" onclick="showSection('gospel', this)">Gospel</button>
+    <button class="nav-btn" data-i18n="sections.popArt" onclick="showSection('wall', this)">Pop Art</button>
+    <button class="nav-btn" data-i18n="sections.abstract" onclick="showSection('abstract', this)">Abstract</button>
+    <button class="nav-btn" data-i18n="sections.pets" onclick="showSection('pets', this)">Pets</button>
   </div>
 
   <!-- ========== FAQ SECTION ========== -->
@@ -4953,6 +4957,24 @@
         }
       }
 
+      // Dynamic nav-container positioning
+      const navContainer = document.querySelector('.nav-container');
+      if (navContainer) {
+        if (sectionName === 'featured') {
+          // For Featured: keep nav at bottom (after Pet CTA section)
+          const petCta = document.querySelector('.pet-cta-container');
+          if (petCta && petCta.nextElementSibling !== navContainer) {
+            petCta.insertAdjacentElement('afterend', navContainer);
+          }
+        } else {
+          // For other sections: move nav to top (after section title)
+          const sectionTitle = targetSection.querySelector('.section-title');
+          if (sectionTitle && sectionTitle.nextElementSibling !== navContainer) {
+            sectionTitle.insertAdjacentElement('afterend', navContainer);
+          }
+        }
+      }
+
       // Scroll to the top of the section with offset for fixed header
       setTimeout(() => {
         const sectionTop = targetSection.getBoundingClientRect().top + window.pageYOffset;
@@ -5386,9 +5408,12 @@
       abstract: 'Abstract Rugs'
     };
 
+    // Create blurred gradient placeholder (mimics blurry image)
+    const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0%25' stop-color='%23FFE88A'/%3E%3Cstop offset='50%25' stop-color='%23D1A700'/%3E%3Cstop offset='100%25' stop-color='%23755E00'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect fill='url(%23g)' width='300' height='300'/%3E%3C/svg%3E";
+
     return `
       <div class="${cardClasses}" data-price="${price}" onclick="openLightbox('${img}', '${title}', '${categoryLabels[category]}')">
-        <img data-src="${img}" alt="${title}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%23e0e0e0' width='300' height='300'/%3E%3C/svg%3E">
+        <img data-src="${img}" alt="${title}" src="${placeholder}">
         <div class="card-price">$${price} USD</div>
         <div class="card-tag">${title.split('#')[0]}#${title.split('#')[1]}</div>
       </div>
@@ -5483,6 +5508,13 @@
       },
       gallery: {
         showMore: "Show More"
+      },
+      sections: {
+        featured: "Featured",
+        gospel: "Faith +",
+        popArt: "Pop Art",
+        pets: "Pets",
+        abstract: "Abstract"
       },
       faq: {
         title: "Frequently Asked Questions",
@@ -5649,6 +5681,13 @@
       gallery: {
         showMore: "Ver Más"
       },
+      sections: {
+        featured: "Destacados",
+        gospel: "Fe +",
+        popArt: "Arte Pop",
+        pets: "Mascotas",
+        abstract: "Abstracto"
+      },
       faq: {
         title: "Preguntas Frecuentes",
         items: [
@@ -5814,6 +5853,13 @@
       gallery: {
         showMore: "Voir Plus"
       },
+      sections: {
+        featured: "En Vedette",
+        gospel: "Foi +",
+        popArt: "Art Pop",
+        pets: "Animaux",
+        abstract: "Abstrait"
+      },
       faq: {
         title: "Questions Fréquemment Posées",
         items: [
@@ -5978,6 +6024,13 @@
       },
       gallery: {
         showMore: "Ver Mais"
+      },
+      sections: {
+        featured: "Destaque",
+        gospel: "Fe +",
+        popArt: "Arte Pop",
+        pets: "Animais",
+        abstract: "Abstrato"
       },
       faq: {
         title: "Perguntas Frequentes",
