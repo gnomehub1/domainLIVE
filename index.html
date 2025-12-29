@@ -4912,30 +4912,28 @@
   }
 
   function showSection(sectionName, btnElement) {
-    // Update horizontal navigation buttons
+    // Update both navigation systems by matching the section name in onclick attribute
     const buttons = document.querySelectorAll('.nav-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    if (btnElement && btnElement.classList.contains('nav-btn')) {
-      btnElement.classList.add('active');
-    }
-
-    // Update hamburger navigation menu
     const hamburgerMenuItems = document.querySelectorAll('.hamburger-menu-item');
+
+    // Remove active class from all
+    buttons.forEach(btn => btn.classList.remove('active'));
     hamburgerMenuItems.forEach(item => item.classList.remove('active'));
-    if (btnElement && btnElement.classList.contains('hamburger-menu-item')) {
-      btnElement.classList.add('active');
-    }
 
-    // Sync both nav systems - find and activate corresponding nav item
-    const horizontalBtn = Array.from(buttons).find(btn =>
-      btn.textContent.toLowerCase() === sectionName.toLowerCase()
-    );
-    const hamburgerItem = Array.from(hamburgerMenuItems).find(item =>
-      item.textContent.toLowerCase() === sectionName.toLowerCase()
-    );
+    // Find and activate the correct button/item in both nav systems
+    buttons.forEach(btn => {
+      const onclick = btn.getAttribute('onclick');
+      if (onclick && onclick.includes(`'${sectionName}'`)) {
+        btn.classList.add('active');
+      }
+    });
 
-    if (horizontalBtn) horizontalBtn.classList.add('active');
-    if (hamburgerItem) hamburgerItem.classList.add('active');
+    hamburgerMenuItems.forEach(item => {
+      const onclick = item.getAttribute('onclick');
+      if (onclick && onclick.includes(`'${sectionName}'`)) {
+        item.classList.add('active');
+      }
+    });
 
     // Hide all sections
     const sections = document.querySelectorAll('.category-section');
@@ -5521,7 +5519,7 @@
         items: [
           {
             question: "How long does shipping take?",
-            answer: "Rugs typically take 1-2 weeks to create and ship, depending on availability. We always try to deliver ASAP! Shipping within Colombia is FREE, and international shipping times vary by location."
+            answer: "The shipping process usually takes 1-2 weeks depending on its final destination. International shipping times may vary by location. We always try to deliver ASAP!"
           },
           {
             question: "Can I customize my rug design?",
@@ -5537,7 +5535,7 @@
           },
           {
             question: "What are international shipping costs?",
-            answer: "Colombia enjoys FREE shipping! For international orders:<br><br><strong>Gospel & Wall/Floor Rugs:</strong><br>• Latin America, US & Canada: add $30 USD shipping fee<br>• Europe & Australia: add $80 USD shipping fee<br><br><strong>Keyboard Rugs:</strong><br>• Latin America, US & Canada: add $25 USD shipping fee<br>• Europe & Australia: add $50 USD shipping fee"
+            answer: "Latin America, US & Canada: $30 USD shipping fee<br> Europe & Australia: $80 USD shipping fee<br>*FREE shipping within Colombia!"
           },
           {
             question: "Do you offer refunds or exchanges?",
@@ -5549,7 +5547,7 @@
           },
           {
             question: "Can I see a preview before ordering?",
-            answer: "Yes! For custom designs, we provide a FREE digital mockup within 24 hours of your photo/image submission. Once you approve the design, we require a deposit to begin crafting your masterpiece. For Gospel, Keyboard, or Wall/Floor rugs, what you see in our gallery is what you get!"
+            answer: "Yes! For custom designs, we provide a FREE digital mockup within 24 hours of your photo/image submission. Once you approve the design, we require a deposit to begin crafting your masterpiece. For our catalog rugs, what you see in our gallery is what you get!"
           }
         ]
       },
@@ -5693,7 +5691,7 @@
         items: [
           {
             question: "¿Cuánto tarda el envío?",
-            answer: "Las alfombras generalmente tardan 1-2 semanas en crearse y enviarse, dependiendo de la disponibilidad. ¡Siempre tratamos de entregar lo antes posible! El envío dentro de Colombia es GRATIS, y los tiempos de envío internacional varían según la ubicación."
+            answer: "El proceso de envío suele tardar entre 1 y 2 semanas, dependiendo del destino final. Los plazos de envío internacional pueden variar según la ubicación. ¡Siempre intentamos hacer el envio lo antes posible!"
           },
           {
             question: "¿Puedo personalizar el diseño de mi alfombra?",
@@ -5709,7 +5707,7 @@
           },
           {
             question: "¿Cuáles son los costos de envío internacional?",
-            answer: "¡Colombia disfruta de envío GRATIS! Para pedidos internacionales:<br><br><strong>Alfombras Gospel y Wall/Floor:</strong><br>• Latinoamérica, EE. UU. y Canadá: agregar tarifa de envío de $30 USD<br>• Europa y Australia: agregar tarifa de envío de $80 USD<br><br><strong>Alfombras Keyboard:</strong><br>• Latinoamérica, EE. UU. y Canadá: agregar tarifa de envío de $25 USD<br>• Europa y Australia: agregar tarifa de envío de $50 USD"
+            answer: "América Latina, EE. UU. y Canadá: $30 USD de gastos de envío<br> Europa y Australia: $80 USD de gastos de envío<br>*¡Envío GRATIS dentro de Colombia!"
           },
           {
             question: "¿Ofrecen reembolsos o cambios?",
@@ -5721,7 +5719,7 @@
           },
           {
             question: "¿Puedo ver una vista previa antes de ordenar?",
-            answer: "¡Sí! Para diseños personalizados, proporcionamos una maqueta digital GRATUITA dentro de las 24 horas posteriores al envío de tu foto/imagen. Una vez que apruebes el diseño, requerimos un depósito para comenzar a crear tu obra maestra. Para alfombras Gospel, Keyboard o Wall/Floor, ¡lo que ves en nuestra galería es lo que obtienes!"
+            answer: "¡Sí! Para diseños personalizados, proporcionamos una maqueta digital GRATUITA dentro de las 24 horas posteriores al envío de tu foto/imagen. Una vez que apruebes el diseño, requerimos un depósito para comenzar a crear tu obra maestra. En cuanto a las alfombras de nuestro catálogo, ¡lo que ves en nuestra galería es lo que obtendrás!"
           }
         ]
       },
@@ -5865,7 +5863,7 @@
         items: [
           {
             question: "Combien de temps prend la livraison ?",
-            answer: "Les tapis prennent généralement 1 à 2 semaines pour être créés et expédiés, selon la disponibilité. Nous essayons toujours de livrer le plus rapidement possible ! La livraison en Colombie est GRATUITE, et les délais de livraison internationaux varient selon l'emplacement."
+            answer: "Le processus d'expédition prend généralement 1 à 2 semaines, selon la destination finale. Les délais d'expédition internationale peuvent varier selon le lieu. Nous nous efforçons toujours de livrer dans les meilleurs délais !"
           },
           {
             question: "Puis-je personnaliser le design de mon tapis ?",
@@ -5881,7 +5879,7 @@
           },
           {
             question: "Quels sont les frais de livraison internationaux ?",
-            answer: "La Colombie bénéficie de la livraison GRATUITE ! Pour les commandes internationales :<br><br><strong>Tapis Gospel et Wall/Floor :</strong><br>• Amérique Latine et États-Unis : ajouter 30 USD de frais de livraison<br>• Europe et Australie : ajouter 80 USD de frais de livraison<br><br><strong>Tapis Keyboard :</strong><br>• Amérique Latine et États-Unis : ajouter 25 USD de frais de livraison<br>• Europe et Australie : ajouter 50 USD de frais de livraison"
+            answer: "Amérique latine, États-Unis et Canada : frais d'expédition de 30 $ US<br> Europe et Australie : frais d'expédition de 80 $ US<br>*Livraison GRATUITE en Colombie !"
           },
           {
             question: "Proposez-vous des remboursements ou des échanges ?",
@@ -5893,7 +5891,7 @@
           },
           {
             question: "Puis-je voir un aperçu avant de commander ?",
-            answer: "Oui ! Pour les designs personnalisés, nous fournissons une maquette numérique GRATUITE dans les 24 heures suivant la soumission de votre photo/image. Une fois que vous approuvez le design, nous demandons un acompte pour commencer à créer votre chef-d'œuvre. Pour les tapis Gospel, Keyboard ou Wall/Floor, ce que vous voyez dans notre galerie est ce que vous obtenez !"
+            answer: "Oui ! Pour les designs personnalisés, nous fournissons une maquette numérique GRATUITE dans les 24 heures suivant l'envoi de votre photo/image. Une fois que vous avez approuvé le design, nous demandons un acompte pour commencer à créer votre chef-d'œuvre. Pour les tapis de notre catalogue, ce que vous voyez dans notre galerie est exactement ce que vous recevrez !"
           }
         ]
       },
@@ -6037,7 +6035,7 @@
         items: [
           {
             question: "Quanto tempo leva o envio?",
-            answer: "Os tapetes geralmente levam 1-2 semanas para serem criados e enviados, dependendo da disponibilidade. Sempre tentamos entregar o mais rápido possível! O envio dentro da Colômbia é GRÁTIS, e os prazos de envio internacional variam de acordo com a localização."
+            answer: "O processo de envio geralmente leva de 1 a 2 semanas, dependendo do destino final. Os prazos de envio internacional podem variar de acordo com a localização. Sempre tentamos entregar o mais rápido possível!"
           },
           {
             question: "Posso personalizar o design do meu tapete?",
@@ -6053,7 +6051,7 @@
           },
           {
             question: "Quais são os custos de envio internacional?",
-            answer: "A Colômbia desfruta de envio GRÁTIS! Para pedidos internacionais:<br><br><strong>Tapetes Gospel e Wall/Floor:</strong><br>• América Latina e EUA: adicionar taxa de envio de $30 USD<br>• Europa e Austrália: adicionar taxa de envio de $80 USD<br><br><strong>Tapetes Keyboard:</strong><br>• América Latina e EUA: adicionar taxa de envio de $25 USD<br>• Europa e Austrália: adicionar taxa de envio de $50 USD"
+            answer: "América Latina, EUA e Canadá: taxa de envio de US$ 30<br> Europa e Austrália: taxa de envio de US$ 80<br>*Envio GRÁTIS dentro da Colômbia!"
           },
           {
             question: "Vocês oferecem reembolsos ou trocas?",
@@ -6065,7 +6063,7 @@
           },
           {
             question: "Posso ver uma prévia antes de encomendar?",
-            answer: "Sim! Para designs personalizados, fornecemos uma maquete digital GRATUITA dentro de 24 horas após o envio de sua foto/imagem. Depois de aprovar o design, exigimos um depósito para começar a criar sua obra-prima. Para tapetes Gospel, Keyboard ou Wall/Floor, o que você vê em nossa galeria é o que você obtém!"
+            answer: "Sim! Para designs personalizados, fornecemos uma maquete digital GRATUITA dentro de 24 horas após o envio da sua foto/imagem. Assim que aprovar o design, solicitamos um depósito para começar a criar a sua obra-prima. Para os tapetes do nosso catálogo, o que vê na nossa galeria é o que recebe!"
           }
         ]
       },
