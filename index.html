@@ -2429,8 +2429,8 @@
   }
 
   .lang-btn.active {
-    color: var(--w-white);
-    background: var(--w-magenta);
+    color: var(--w-dark);
+    background: var(--w-yellow);
     border-radius: 3px;
     padding: 4px 10px;
   }
@@ -2500,7 +2500,7 @@
     <a href="#" class="hamburger-menu-item" data-i18n="sections.gospel" onclick="showSection('gospel', this); toggleHamburgerMenu(); return false;">Gospel</a>
     <a href="#" class="hamburger-menu-item" data-i18n="sections.popArt" onclick="showSection('wall', this); toggleHamburgerMenu(); return false;">Pop Art</a>
     <a href="#" class="hamburger-menu-item" data-i18n="sections.abstract" onclick="showSection('abstract', this); toggleHamburgerMenu(); return false;">Abstract</a>
-    <a href="#" class="hamburger-menu-item" data-i18n="sections.pets" onclick="showSection('pets', this); toggleHamburgerMenu(); return false;">Pets</a>
+    <a href="pages/petsection.html" class="hamburger-menu-item" data-i18n="sections.pets" onclick="toggleHamburgerMenu();">Pets</a>
   </nav>
 
   <!-- Instagram Icon in top-right corner -->
@@ -2575,76 +2575,6 @@
     </div>
   </section>
 
-  <!-- PETS SECTION - Hero Grid Style -->
-  <section id="pets-section" class="category-section">
-    <h2 class="section-title" data-i18n="sections.pets">Pets</h2>
-
-    <!-- Use same hero-grid-container as FEATURED section -->
-    <div class="hero-grid-container">
-
-      <!-- Pet Card 1 -->
-      <div class="hero-card" onclick="openLightbox('pet1.jpg', 'Pet Design #1', 'Pet Rugs', true)">
-        <img src="pet1.jpg" alt="Pet Design 1" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 2 -->
-      <div class="hero-card" onclick="openLightbox('pet2.jpg', 'Pet Design #2', 'Pet Rugs', true)">
-        <img src="pet2.jpg" alt="Pet Design 2" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 3 -->
-      <div class="hero-card" onclick="openLightbox('pet3.jpg', 'Pet Design #3', 'Pet Rugs', true)">
-        <img src="pet3.jpg" alt="Pet Design 3" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 4 -->
-      <div class="hero-card" onclick="openLightbox('pet4.jpg', 'Pet Design #4', 'Pet Rugs', true)">
-        <img src="pet4.jpg" alt="Pet Design 4" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 5 -->
-      <div class="hero-card" onclick="openLightbox('pet5.jpg', 'Pet Design #5', 'Pet Rugs', true)">
-        <img src="pet5.jpg" alt="Pet Design 5" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 6 -->
-      <div class="hero-card" onclick="openLightbox('pet6.jpg', 'Pet Design #6', 'Pet Rugs', true)">
-        <img src="pet6.jpg" alt="Pet Design 6" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 7 -->
-      <div class="hero-card" onclick="openLightbox('pet7.jpg', 'Pet Design #7', 'Pet Rugs', true)">
-        <img src="pet7.jpg" alt="Pet Design 7" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 8 -->
-      <div class="hero-card" onclick="openLightbox('pet8.jpg', 'Pet Design #8', 'Pet Rugs', true)">
-        <img src="pet8.jpg" alt="Pet Design 8" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 9 -->
-      <div class="hero-card" onclick="openLightbox('pet9.jpg', 'Pet Design #9', 'Pet Rugs', true)">
-        <img src="pet9.jpg" alt="Pet Design 9" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 10 -->
-      <div class="hero-card" onclick="openLightbox('pet10.jpg', 'Pet Design #10', 'Pet Rugs', true)">
-        <img src="pet10.jpg" alt="Pet Design 10" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 11 -->
-      <div class="hero-card" onclick="openLightbox('pet11.jpg', 'Pet Design #11', 'Pet Rugs', true)">
-        <img src="pet11.jpg" alt="Pet Design 11" class="hero-image" loading="lazy">
-      </div>
-
-      <!-- Pet Card 12 -->
-      <div class="hero-card" onclick="openLightbox('pet12.jpg', 'Pet Design #12', 'Pet Rugs', true)">
-        <img src="pet12.jpg" alt="Pet Design 12" class="hero-image" loading="lazy">
-      </div>
-
-    </div>
-  </section>
-
   <!-- WALL/FLOOR RUGS SECTION -->
   <section id="wall-section" class="category-section">
     <h2 class="section-title" data-i18n="sections.popArt">Pop Art</h2>
@@ -2676,7 +2606,7 @@
     <button class="nav-btn" data-i18n="sections.gospel" onclick="showSection('gospel', this)">Gospel</button>
     <button class="nav-btn" data-i18n="sections.popArt" onclick="showSection('wall', this)">Pop Art</button>
     <button class="nav-btn" data-i18n="sections.abstract" onclick="showSection('abstract', this)">Abstract</button>
-    <button class="nav-btn" data-i18n="sections.pets" onclick="showSection('pets', this)">Pets</button>
+    <button class="nav-btn" data-i18n="sections.pets" onclick="window.location.href='pages/petsection.html'">Pets</button>
   </div>
 
   <!-- ========== FAQ SECTION ========== -->
