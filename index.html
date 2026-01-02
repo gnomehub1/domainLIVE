@@ -2999,7 +2999,7 @@
         Have questions about our rugs? Need help with an order? We're here to help!
       </p>
 
-      <form action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+      <form id="contact-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_subject" value="Billy The Kid - Contact Form">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="Language" id="contact-form-language">
@@ -3043,6 +3043,16 @@
 
         <button type="submit" class="submit-btn" data-i18n="contact.submitBtn">SEND MESSAGE</button>
       </form>
+
+      <!-- Contact Success Message -->
+      <div id="contact-success-message" style="display: none; text-align: center; padding: 40px;">
+        <h3 style="color: var(--w-dark); font-size: 2rem; margin-bottom: 20px;" data-i18n="contact.successTitle">
+          Message Sent Successfully!
+        </h3>
+        <p style="font-size: 1.2rem; line-height: 1.6;" data-i18n="contact.successMessage">
+          We've received your message and will get back to you within 24 hours.
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -3567,6 +3577,58 @@
     });
   }
 
+  // Initialize Contact Form with AJAX
+  function initializeContactForm() {
+    const contactForm = document.getElementById('contact-form');
+    if (!contactForm) return;
+
+    const submitButton = contactForm.querySelector('.submit-btn');
+    const successMessage = document.getElementById('contact-success-message');
+
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.textContent = t('contact.submitting');
+      }
+
+      const formData = new FormData(contactForm);
+
+      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Contact form submitted:', data);
+
+        contactForm.style.display = 'none';
+        if (successMessage) successMessage.style.display = 'block';
+
+        setTimeout(() => {
+          closeContactModal();
+          contactForm.style.display = 'block';
+          contactForm.reset();
+          if (successMessage) successMessage.style.display = 'none';
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = t('contact.submitBtn');
+          }
+        }, 2500);
+      })
+      .catch(error => {
+        console.error('Contact form error:', error);
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.textContent = t('contact.submitBtn');
+        }
+        alert(t('contact.error'));
+      });
+    });
+  }
+
   // Initialize form on page load
   document.addEventListener('DOMContentLoaded', function() {
     // Apply translations on page load
@@ -3581,33 +3643,83 @@
     if (contactFormLang) contactFormLang.value = currentLanguage;
 
     initializeOrderForm();
+    initializeContactForm();
+
+    // Handle hash navigation from external links (e.g., from petsection.html)
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1); // Remove the #
+      const sectionMap = {
+        'featured-section': 'featured',
+        'gospel-section': 'gospel',
+        'wall-section': 'wall',
+        'abstract-section': 'abstract'
+      };
+
+      const sectionName = sectionMap[hash];
+      if (sectionName) {
+        // Find the corresponding menu item
+        const menuItem = document.querySelector(`.hamburger-menu-item[onclick*="showSection('${sectionName}'"]`);
+        if (menuItem) {
+          setTimeout(() => {
+            showSection(sectionName, menuItem);
+          }, 100);
+        }
+      }
+    }
   });
 
-  // Handle browser back button
+  // ========== BROWSER HISTORY MANAGEMENT ==========
+  let currentModalState = { type: null, step: null, zoomed: false };
+
   window.addEventListener('popstate', function(event) {
-    // If QR overlay is open, close it
+    // Priority 1: QR Overlay
     const qrOverlay = document.getElementById('qrOverlay');
     if (qrOverlay && qrOverlay.classList.contains('active')) {
       closeQROverlay();
+      currentModalState = { type: null, step: null, zoomed: false };
       return;
     }
 
-    // If lightbox is open
+    // Priority 2: Lightbox with zoom
     const lightbox = document.getElementById('lightboxModal');
+    const lightboxImage = lightbox ? lightbox.querySelector('.lightbox-image') : null;
+    const isZoomed = lightboxImage && zoomState.scale > 1;
+
+    if (lightbox && lightbox.classList.contains('active') && isZoomed) {
+      resetZoom();
+      history.pushState({ lightbox: true, step: currentStep, zoomed: false }, '');
+      currentModalState = { type: 'lightbox', step: currentStep, zoomed: false };
+      return;
+    }
+
+    // Priority 3: Lightbox multi-step
     if (lightbox && lightbox.classList.contains('active')) {
-      // If at a step > 1, go back one step
       if (currentStep > 1) {
         goBackStep();
-        // Push state again to keep lightbox in history
         history.pushState({ lightbox: true, step: currentStep }, '');
+        currentModalState = { type: 'lightbox', step: currentStep, zoomed: false };
       } else {
-        // At step 1, close the lightbox
         closeLightbox();
+        currentModalState = { type: null, step: null, zoomed: false };
       }
       return;
     }
 
-    // If neither is open, let browser handle normally
+    // Priority 4: Contact Modal
+    const contactModal = document.getElementById('contactModal');
+    if (contactModal && contactModal.classList.contains('active')) {
+      closeContactModal();
+      currentModalState = { type: null, step: null, zoomed: false };
+      return;
+    }
+
+    // Priority 5: About Modal
+    const aboutModal = document.getElementById('aboutModal');
+    if (aboutModal && aboutModal.classList.contains('active')) {
+      closeAboutModal();
+      currentModalState = { type: null, step: null, zoomed: false };
+      return;
+    }
   });
 
   // Touch zoom state
@@ -4080,11 +4192,9 @@
       lightboxModal.classList.remove('mobile-details-mode');
     }
 
-    // Push history state for back button handling
-    if (!lightboxHistoryState) {
-      history.pushState({ lightbox: true }, '');
-      lightboxHistoryState = true;
-    }
+    // Add to browser history
+    history.pushState({ lightbox: true, step: currentStep, zoomed: false }, '');
+    currentModalState = { type: 'lightbox', step: currentStep, zoomed: false };
   }
 
   function closeLightbox() {
@@ -4950,6 +5060,10 @@
         subjectDropdown.value = preSelectedSubject;
       }
     }
+
+    // Add to browser history
+    history.pushState({ contact: true }, '');
+    currentModalState = { type: 'contact', step: null, zoomed: false };
   }
 
   function closeContactModal() {
@@ -4977,6 +5091,10 @@
   function showAboutComingSoon() {
     aboutModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Add to browser history
+    history.pushState({ about: true }, '');
+    currentModalState = { type: 'about', step: null, zoomed: false };
   }
 
   function closeAboutModal() {
@@ -5575,7 +5693,11 @@
         messagePlaceholder: "Tell us how we can help you...",
         attachmentLabel: "ATTACH FILE (OPTIONAL)",
         attachmentHint: "Attach reference images for custom designs (optional)",
-        submitBtn: "SEND MESSAGE"
+        submitBtn: "SEND MESSAGE",
+        successTitle: "Message Sent Successfully!",
+        successMessage: "We've received your message and will get back to you within 24 hours.",
+        submitting: "Sending...",
+        error: "Error sending message. Please try again."
       },
       about: {
         title: "COMING SOON",
@@ -5747,7 +5869,11 @@
         messagePlaceholder: "Cuéntanos cómo podemos ayudarte...",
         attachmentLabel: "ADJUNTAR ARCHIVO (OPCIONAL)",
         attachmentHint: "Adjunta imágenes de referencia para diseños personalizados (opcional)",
-        submitBtn: "ENVIAR MENSAJE"
+        submitBtn: "ENVIAR MENSAJE",
+        successTitle: "¡Mensaje Enviado Exitosamente!",
+        successMessage: "Hemos recibido tu mensaje y te responderemos en 24 horas.",
+        submitting: "Enviando...",
+        error: "Error al enviar el mensaje. Por favor, inténtalo de nuevo."
       },
       about: {
         title: "PRÓXIMAMENTE",
@@ -5919,7 +6045,11 @@
         messagePlaceholder: "Dites-nous comment nous pouvons vous aider...",
         attachmentLabel: "JOINDRE UN FICHIER (OPTIONNEL)",
         attachmentHint: "Joindre des images de référence pour les designs personnalisés (optionnel)",
-        submitBtn: "ENVOYER LE MESSAGE"
+        submitBtn: "ENVOYER LE MESSAGE",
+        successTitle: "Message Envoyé avec Succès !",
+        successMessage: "Nous avons reçu votre message et vous répondrons dans les 24 heures.",
+        submitting: "Envoi en cours...",
+        error: "Erreur lors de l'envoi du message. Veuillez réessayer."
       },
       about: {
         title: "BIENTÔT DISPONIBLE",
@@ -6091,7 +6221,11 @@
         messagePlaceholder: "Conte-nos como podemos ajudá-lo...",
         attachmentLabel: "ANEXAR ARQUIVO (OPCIONAL)",
         attachmentHint: "Anexe imagens de referência para designs personalizados (opcional)",
-        submitBtn: "ENVIAR MENSAGEM"
+        submitBtn: "ENVIAR MENSAGEM",
+        successTitle: "Mensagem Enviada com Sucesso!",
+        successMessage: "Recebemos sua mensagem e responderemos em 24 horas.",
+        submitting: "Enviando...",
+        error: "Erro ao enviar mensagem. Por favor, tente novamente."
       },
       about: {
         title: "EM BREVE",

@@ -17,7 +17,7 @@
 
 <style>
   :root {
-    --electric-yellow: #FFde5c;
+    --electric-yellow: #FFE88A;
     --ink-black: #2E2610;
     --paper-white: #FFFAE6;
     --shadow-hard: 8px 8px 0px var(--ink-black);
@@ -73,12 +73,20 @@
     filter: drop-shadow(4px 4px 0px #cc9900);
     transition: transform 0.3s ease, filter 0.3s ease;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none;
   }
 
   .logo-corner img {
     width: 100%;
     height: auto;
     display: block;
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none;
   }
 
   @media (hover: hover) {
@@ -92,6 +100,120 @@
     .logo-corner:active {
       transform: scale(0.95);
     }
+  }
+
+  /* ========== HAMBURGER MENU ========== */
+  .hamburger-btn {
+    position: fixed;
+    top: 85px;
+    left: 20px;
+    z-index: 100;
+    width: 50px;
+    height: 50px;
+    background: var(--electric-yellow);
+    border: 3px solid var(--ink-black);
+    box-shadow: 4px 4px 0px var(--ink-black);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0px var(--ink-black);
+  }
+
+  .hamburger-btn span {
+    width: 24px;
+    height: 3px;
+    background: var(--ink-black);
+    transition: all 0.3s ease;
+    display: block;
+  }
+
+  .hamburger-btn.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+
+  .hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger-btn.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  .hamburger-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--paper-white);
+    border-right: 4px solid var(--ink-black);
+    box-shadow: 8px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 99;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 140px 20px 20px;
+    overflow-y: auto;
+    visibility: hidden;
+  }
+
+  .hamburger-menu.active {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .hamburger-menu-item {
+    display: block;
+    font-family: 'Righteous', cursive;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-black);
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border: 3px solid transparent;
+    transition: all 0.2s ease;
+    text-align: left;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .hamburger-menu-item:hover {
+    background: var(--electric-yellow);
+    border: 3px solid var(--ink-black);
+    transform: translateX(5px);
+  }
+
+  .hamburger-menu-item.active {
+    background: var(--electric-yellow);
+    border: 3px solid var(--ink-black);
+    box-shadow: 4px 4px 0px var(--ink-black);
+  }
+
+  .hamburger-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 98;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .hamburger-overlay.active {
+    opacity: 1;
+    pointer-events: all;
   }
 
   /* Instagram Icon */
@@ -474,6 +596,13 @@
       padding: 3px 8px;
     }
 
+    .hamburger-btn {
+      width: 45px;
+      height: 45px;
+      top: 60px;
+      left: 15px;
+    }
+
     .whatsapp-link {
       width: 50px;
       height: 50px;
@@ -532,6 +661,13 @@
       top: 5px;
       right: 5px;
       padding: 4px 6px;
+    }
+
+    .hamburger-btn {
+      width: 43px;
+      height: 43px;
+      top: 55px;
+      left: 10px;
     }
 
     .modal-box {
@@ -828,7 +964,7 @@
   }
 
   /* Very small screens - further optimization */
-  @media (max-width: 400px) {
+  @media (max-width: 374px) and (min-width: 321px) {
     .gallery-container {
       grid-auto-rows: 130px; /* Even smaller base */
       gap: 10px;
@@ -839,6 +975,20 @@
       font-size: 0.6rem;
       padding: 2px 5px;
     }
+  }
+
+  /* Fix for 375px-424px - make it look like 425px */
+  @media (max-width: 424px) and (min-width: 375px) {
+    .gallery-container {
+      grid-template-columns: repeat(2, 1fr); /* Force 2 equal columns */
+      grid-auto-rows: 170px;
+      gap: 15px;
+      padding: 15px;
+    }
+
+    .card-wide { grid-column: span 2; grid-row: span 1; }
+    .card-tall { grid-column: span 1; grid-row: span 2; }
+    .card-big { grid-column: span 2; grid-row: span 2; }
   }
 
   /* ========== MOBILE & DESKTOP UX ENHANCEMENTS ========== */
@@ -1064,7 +1214,7 @@
     box-shadow: 8px 8px 0px var(--ink-black);
     text-decoration: none;
     position: fixed;
-    bottom: 110px;
+    bottom: 130px;
     right: 15px;
     z-index: 100;
   }
@@ -1102,6 +1252,30 @@
   <a href="../index.html" class="logo-corner">
     <img src="../Logo.png" alt="Billy The Kid">
   </a>
+
+  <!-- Hamburger Menu Button -->
+  <button class="hamburger-btn" onclick="toggleHamburgerMenu()" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- Hamburger Menu Overlay -->
+  <div class="hamburger-overlay" onclick="toggleHamburgerMenu()"></div>
+
+  <!-- Hamburger Menu -->
+  <nav class="hamburger-menu">
+    <a href="../index.html#featured-section" class="hamburger-menu-item"
+       data-es="Destacados" data-en="Featured" data-fr="En Vedette" data-pt="Destaque">Featured</a>
+    <a href="../index.html#gospel-section" class="hamburger-menu-item"
+       data-es="Fe +" data-en="Faith +" data-fr="Foi +" data-pt="Fe +">Gospel</a>
+    <a href="../index.html#wall-section" class="hamburger-menu-item"
+       data-es="Arte Pop" data-en="Pop Art" data-fr="Art Pop" data-pt="Arte Pop">Pop Art</a>
+    <a href="../index.html#abstract-section" class="hamburger-menu-item"
+       data-es="Abstracto" data-en="Abstract" data-fr="Abstrait" data-pt="Abstrato">Abstract</a>
+    <a href="#" class="hamburger-menu-item active" onclick="event.preventDefault();"
+       data-es="Mascotas" data-en="Pets" data-fr="Animaux" data-pt="Animais">Pets</a>
+  </nav>
 
   <!-- Instagram Icon in top-right corner -->
   <div class="social-links">
@@ -1287,7 +1461,7 @@
         <h2 style="text-align:center; font-size:2rem; margin-top:0;" data-es="EMPIEZA TU DISEÑO" data-en="START YOUR DESIGN" data-fr="COMMENCEZ VOTRE DESIGN" data-pt="COMECE SEU DESIGN">EMPIEZA TU DISEÑO</h2>
         <p style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
 
-        <form action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+        <form id="pet-design-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
           <div class="form-group">
             <label data-es="Tu Nombre" data-en="Your Name" data-fr="Votre Nom" data-pt="Seu Nome">Tu Nombre</label>
             <input type="text" name="name" required placeholder="Juan Pérez">
@@ -1313,6 +1487,20 @@
           </div>
           <button type="submit" class="submit-btn" data-es="Enviar Solicitud" data-en="Send Request" data-fr="Envoyer la Demande" data-pt="Enviar Pedido">Enviar Solicitud</button>
         </form>
+
+        <!-- Success Message -->
+        <div id="pet-form-success" style="display: none; text-align: center; padding: 40px;">
+          <h3 style="color: var(--ink-black); font-size: 2rem; margin-bottom: 20px;"
+              data-es="¡Solicitud Enviada!" data-en="Request Sent!"
+              data-fr="Demande Envoyée!" data-pt="Pedido Enviado!">¡Solicitud Enviada!</h3>
+          <p style="font-size: 1.2rem; line-height: 1.6;"
+             data-es="Te enviaremos tu propuesta digital en 24 horas. Revisa tu email."
+             data-en="We'll send your digital mockup within 24 hours. Check your email."
+             data-fr="Nous vous enverrons votre maquette dans les 24 heures. Vérifiez vos emails."
+             data-pt="Enviaremos sua maquete em 24 horas. Confira seu email.">
+            Te enviaremos tu propuesta digital en 24 horas. Revisa tu email.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -1327,7 +1515,7 @@
         Have questions about our rugs? Need help with an order? We're here to help!
       </p>
 
-      <form action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+      <form id="contact-form-pet" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="_subject" value="Billy The Kid - Contact Form">
         <input type="hidden" name="_captcha" value="false">
 
@@ -1370,6 +1558,20 @@
 
         <button type="submit" class="submit-btn" data-es="ENVIAR MENSAJE" data-en="SEND MESSAGE" data-fr="ENVOYER MESSAGE" data-pt="ENVIAR MENSAGEM">SEND MESSAGE</button>
       </form>
+
+      <!-- Contact Success Message -->
+      <div id="contact-success-pet" style="display: none; text-align: center; padding: 40px;">
+        <h3 style="color: var(--ink-black); font-size: 2rem; margin-bottom: 20px;"
+            data-es="¡Mensaje Enviado!" data-en="Message Sent!"
+            data-fr="Message Envoyé!" data-pt="Mensagem Enviada!">¡Mensaje Enviado!</h3>
+        <p style="font-size: 1.2rem; line-height: 1.6;"
+           data-es="Hemos recibido tu mensaje y te responderemos en 24 horas."
+           data-en="We've received your message and will respond within 24 hours."
+           data-fr="Nous avons reçu votre message et vous répondrons dans les 24 heures."
+           data-pt="Recebemos sua mensagem e responderemos em 24 horas.">
+          Hemos recibido tu mensaje y te responderemos en 24 horas.
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -1428,6 +1630,14 @@
         opt.innerText = translation;
       }
     });
+
+    // Translate hamburger menu items
+    document.querySelectorAll('.hamburger-menu-item').forEach(item => {
+      const translation = item.getAttribute(`data-${lang}`);
+      if (translation) {
+        item.textContent = translation;
+      }
+    });
   }
 
   // --- MODALS ---
@@ -1464,11 +1674,19 @@
     }
 
     productModal.classList.add('active');
+
+    // Add to browser history
+    history.pushState({ lightbox: true, zoomed: false }, '');
+    currentModalState = { type: 'lightbox', zoomed: false };
   }
 
   function openFormModal() {
     closeModals();
     formModal.classList.add('active');
+
+    // Add to browser history
+    history.pushState({ form: true }, '');
+    currentModalState = { type: 'form', zoomed: false };
   }
 
   function closeModals() {
@@ -1487,6 +1705,10 @@
     closeModals();
     contactModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Add to browser history
+    history.pushState({ contact: true }, '');
+    currentModalState = { type: 'contact', zoomed: false };
   }
 
   function closeContactModal() {
@@ -1499,6 +1721,10 @@
     closeModals();
     aboutModal.classList.add('active');
     document.body.style.overflow = 'hidden';
+
+    // Add to browser history
+    history.pushState({ about: true }, '');
+    currentModalState = { type: 'about', zoomed: false };
   }
 
   function closeAboutModal() {
@@ -2043,6 +2269,209 @@
   document.getElementById('fullscreen-image').addEventListener('dblclick', function(e) {
     e.stopPropagation();
     exitFullScreen();
+  });
+
+  // Initialize Pet Design Form with AJAX
+  function initializePetDesignForm() {
+    const form = document.getElementById('pet-design-form');
+    if (!form) return;
+
+    const submitButton = form.querySelector('.submit-btn');
+    const successMessage = document.getElementById('pet-form-success');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        const submittingText = {
+          en: 'Sending...', es: 'Enviando...',
+          fr: 'Envoi...', pt: 'Enviando...'
+        };
+        submitButton.textContent = submittingText[currentLang] || submittingText.en;
+      }
+
+      const formData = new FormData(form);
+
+      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Pet form submitted:', data);
+
+        form.style.display = 'none';
+        if (successMessage) successMessage.style.display = 'block';
+
+        setTimeout(() => {
+          closeModals();
+          form.style.display = 'block';
+          form.reset();
+          if (successMessage) successMessage.style.display = 'none';
+          if (submitButton) {
+            submitButton.disabled = false;
+            const submitText = {
+              en: 'Send Request', es: 'Enviar Solicitud',
+              fr: 'Envoyer la Demande', pt: 'Enviar Pedido'
+            };
+            submitButton.textContent = submitText[currentLang] || submitText.en;
+          }
+        }, 2500);
+      })
+      .catch(error => {
+        console.error('Pet form error:', error);
+        if (submitButton) {
+          submitButton.disabled = false;
+          const submitText = {
+            en: 'Send Request', es: 'Enviar Solicitud',
+            fr: 'Envoyer la Demande', pt: 'Enviar Pedido'
+          };
+          submitButton.textContent = submitText[currentLang] || submitText.en;
+        }
+        const errorText = {
+          en: 'Error. Please try again.', es: 'Error. Inténtalo de nuevo.',
+          fr: 'Erreur. Veuillez réessayer.', pt: 'Erro. Tente novamente.'
+        };
+        alert(errorText[currentLang] || errorText.en);
+      });
+    });
+  }
+
+  initializePetDesignForm();
+
+  // Initialize Contact Form with AJAX
+  function initializeContactFormPet() {
+    const form = document.getElementById('contact-form-pet');
+    if (!form) return;
+
+    const submitButton = form.querySelector('.submit-btn');
+    const successMessage = document.getElementById('contact-success-pet');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        const submittingText = {
+          en: 'Sending...', es: 'Enviando...',
+          fr: 'Envoi...', pt: 'Enviando...'
+        };
+        submitButton.textContent = submittingText[currentLang] || submittingText.en;
+      }
+
+      const formData = new FormData(form);
+
+      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Contact form submitted:', data);
+
+        form.style.display = 'none';
+        if (successMessage) successMessage.style.display = 'block';
+
+        setTimeout(() => {
+          closeContactModal();
+          form.style.display = 'block';
+          form.reset();
+          if (successMessage) successMessage.style.display = 'none';
+          if (submitButton) {
+            submitButton.disabled = false;
+            const submitText = {
+              en: 'SEND MESSAGE', es: 'ENVIAR MENSAJE',
+              fr: 'ENVOYER MESSAGE', pt: 'ENVIAR MENSAGEM'
+            };
+            submitButton.textContent = submitText[currentLang] || submitText.en;
+          }
+        }, 2500);
+      })
+      .catch(error => {
+        console.error('Contact form error:', error);
+        if (submitButton) {
+          submitButton.disabled = false;
+          const submitText = {
+            en: 'SEND MESSAGE', es: 'ENVIAR MENSAJE',
+            fr: 'ENVOYER MESSAGE', pt: 'ENVIAR MENSAGEM'
+          };
+          submitButton.textContent = submitText[currentLang] || submitText.en;
+        }
+        const errorText = {
+          en: 'Error sending message. Please try again.',
+          es: 'Error al enviar el mensaje. Inténtalo de nuevo.',
+          fr: 'Erreur lors de l\'envoi du message.',
+          pt: 'Erro ao enviar a mensagem.'
+        };
+        alert(errorText[currentLang] || errorText.en);
+      });
+    });
+  }
+
+  initializeContactFormPet();
+
+  // ========== HAMBURGER MENU TOGGLE ==========
+  function toggleHamburgerMenu() {
+    const hamburgerBtn = document.querySelector('.hamburger-btn');
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const hamburgerOverlay = document.querySelector('.hamburger-overlay');
+
+    hamburgerBtn.classList.toggle('active');
+    hamburgerMenu.classList.toggle('active');
+    hamburgerOverlay.classList.toggle('active');
+
+    // Prevent body scroll when menu is open
+    if (hamburgerMenu.classList.contains('active')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  // ========== BROWSER HISTORY MANAGEMENT ==========
+  let currentModalState = { type: null, zoomed: false };
+
+  window.addEventListener('popstate', function(event) {
+    // Priority 1: Lightbox with zoom
+    if (productModal.classList.contains('active')) {
+      const lbImage = document.getElementById('lb-image');
+      const isZoomed = lbImage && zoomState.scale > 1;
+
+      if (isZoomed) {
+        resetZoom();
+        history.pushState({ lightbox: true, zoomed: false }, '');
+        currentModalState = { type: 'lightbox', zoomed: false };
+        return;
+      } else {
+        closeModals();
+        currentModalState = { type: null, zoomed: false };
+        return;
+      }
+    }
+
+    // Priority 2: Form Modal
+    if (formModal.classList.contains('active')) {
+      closeModals();
+      currentModalState = { type: null, zoomed: false };
+      return;
+    }
+
+    // Priority 3: Contact Modal
+    if (contactModal.classList.contains('active')) {
+      closeContactModal();
+      currentModalState = { type: null, zoomed: false };
+      return;
+    }
+
+    // Priority 4: About Modal
+    if (aboutModal.classList.contains('active')) {
+      closeAboutModal();
+      currentModalState = { type: null, zoomed: false };
+      return;
+    }
   });
 
   // Initialize with stored preference, browser language, or default to English
