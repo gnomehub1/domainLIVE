@@ -262,6 +262,47 @@
     text-shadow: 4px 4px 0px var(--w-cyan), -2px -2px 0px var(--w-magenta);
   }
 
+  /* Featured Section Header */
+  #featured-section header {
+    padding: 80px 20px 40px;
+    text-align: center;
+  }
+
+  #featured-section header h1 {
+    font-size: 3.5rem;
+    line-height: 1;
+    text-shadow: none;
+    padding: 0 80px; /* Add horizontal padding to avoid overlapping fixed elements */
+  }
+
+  /* Responsive font sizes for mobile */
+  @media (max-width: 768px) {
+    #featured-section header {
+      padding: 70px 15px 30px;
+    }
+    #featured-section header h1 {
+      font-size: 2rem;
+      padding: 0 70px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #featured-section header {
+      padding: 65px 10px 25px;
+    }
+    #featured-section header h1 {
+      font-size: 1.6rem;
+      padding: 0 60px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    #featured-section header h1 {
+      font-size: 1.4rem;
+      padding: 0 55px;
+    }
+  }
+
   /* Hero Image in Header */
   .hero-container {
     max-width: 765px; /* 15% smaller than 900px */
@@ -390,12 +431,11 @@
     display: inline-block;
     background: var(--w-dark);
     color: var(--w-white);
-    font-weight: 800;
-    padding: 8px 25px;
-    margin-top: 20px;
+    font-weight: bold;
+    padding: 5px 15px;
+    margin-top: 10px;
     font-size: 1.2rem;
     transform: rotate(-2deg);
-    border: 3px solid var(--w-yellow);
   }
 
   /* --- NAVIGATION FILTERS --- */
@@ -2532,6 +2572,11 @@
 
   <!-- FEATURED SECTION (DEFAULT LANDING) - Hero Grid -->
   <section id="featured-section" class="category-section active">
+    <header>
+      <h1 data-i18n="featured.title">Our Featured Rugs</h1>
+      <div class="subtitle" data-i18n="featured.subtitle">Handmade Art</div>
+    </header>
+
     <!-- Hero Grid: 9 lifestyle images showing rugs in home settings -->
     <div class="hero-grid-container">
       <div class="hero-card" onclick="openLightbox('hero.jpg', 'Featured Rugs', 'Custom Rugs', true)">
@@ -5552,6 +5597,10 @@
         customRugLabel: "Order a Custom Rug Here",
         getStartedBtn: "Get Started ➔"
       },
+      featured: {
+        title: "Featured Rugs",
+        subtitle: "Handmade Art"
+      },
       gallery: {
         showMore: "Show More"
       },
@@ -5727,6 +5776,10 @@
       hero: {
         customRugLabel: "Ordena una Personalizada Aquí",
         getStartedBtn: "Comenzar ➔"
+      },
+      featured: {
+        title: "Alfombras Destacadas",
+        subtitle: "Arte Hecho a Mano"
       },
       gallery: {
         showMore: "Ver Más"
@@ -5904,6 +5957,10 @@
         customRugLabel: "Commandez un Tapis Personnalisé Ici",
         getStartedBtn: "Commencer ➔"
       },
+      featured: {
+        title: "Tapis en Vedette",
+        subtitle: "Art Fait Main"
+      },
       gallery: {
         showMore: "Voir Plus"
       },
@@ -6079,6 +6136,10 @@
       hero: {
         customRugLabel: "Encomende um Personalizado Aqui",
         getStartedBtn: "Começar ➔"
+      },
+      featured: {
+        title: "Tapetes em Destaque",
+        subtitle: "Arte Feita à Mão"
       },
       gallery: {
         showMore: "Ver Mais"
