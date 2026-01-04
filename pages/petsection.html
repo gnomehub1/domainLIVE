@@ -1462,6 +1462,10 @@
         <p style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
 
         <form id="pet-design-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_next" id="pet-form-next" value="">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_subject" value="Billy The Kid - Pet Design Request">
+
           <div class="form-group">
             <label data-es="Tu Nombre" data-en="Your Name" data-fr="Votre Nom" data-pt="Seu Nome">Tu Nombre</label>
             <input type="text" name="name" required placeholder="Juan Pérez">
@@ -2271,75 +2275,43 @@
     exitFullScreen();
   });
 
-  // Initialize Pet Design Form with AJAX
-  function initializePetDesignForm() {
-    const form = document.getElementById('pet-design-form');
-    if (!form) return;
+  // Set dynamic redirect URL for FormSubmit
+  const petFormNextInput = document.getElementById('pet-form-next');
+  if (petFormNextInput) {
+    const currentUrl = window.location.origin + window.location.pathname;
+    petFormNextInput.value = currentUrl + '?submitted=pet';
+  }
 
-    const submitButton = form.querySelector('.submit-btn');
-    const successMessage = document.getElementById('pet-form-success');
+  // Check for successful form submission and show success message
+  function checkFormSubmission() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const submitted = urlParams.get('submitted');
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
+    if (submitted === 'pet') {
+      const formModal = document.getElementById('formModal');
+      const form = document.getElementById('pet-design-form');
+      const successMessage = document.getElementById('pet-form-success');
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        const submittingText = {
-          en: 'Sending...', es: 'Enviando...',
-          fr: 'Envoi...', pt: 'Enviando...'
-        };
-        submitButton.textContent = submittingText[currentLang] || submittingText.en;
-      }
-
-      const formData = new FormData(form);
-
-      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Pet form submitted:', data);
-
+      if (formModal && form && successMessage) {
+        formModal.classList.add('active');
         form.style.display = 'none';
-        if (successMessage) successMessage.style.display = 'block';
+        successMessage.style.display = 'block';
 
+        // Remove the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Auto-close after 2.5 seconds
         setTimeout(() => {
           closeModals();
           form.style.display = 'block';
-          form.reset();
-          if (successMessage) successMessage.style.display = 'none';
-          if (submitButton) {
-            submitButton.disabled = false;
-            const submitText = {
-              en: 'Send Request', es: 'Enviar Solicitud',
-              fr: 'Envoyer la Demande', pt: 'Enviar Pedido'
-            };
-            submitButton.textContent = submitText[currentLang] || submitText.en;
-          }
+          successMessage.style.display = 'none';
         }, 2500);
-      })
-      .catch(error => {
-        console.error('Pet form error:', error);
-        if (submitButton) {
-          submitButton.disabled = false;
-          const submitText = {
-            en: 'Send Request', es: 'Enviar Solicitud',
-            fr: 'Envoyer la Demande', pt: 'Enviar Pedido'
-          };
-          submitButton.textContent = submitText[currentLang] || submitText.en;
-        }
-        const errorText = {
-          en: 'Error. Please try again.', es: 'Error. Inténtalo de nuevo.',
-          fr: 'Erreur. Veuillez réessayer.', pt: 'Erro. Tente novamente.'
-        };
-        alert(errorText[currentLang] || errorText.en);
-      });
-    });
+      }
+    }
   }
 
-  initializePetDesignForm();
+  // Run on page load
+  checkFormSubmission();
 
   // Initialize Contact Form with AJAX
   function initializeContactFormPet() {

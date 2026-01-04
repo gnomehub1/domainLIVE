@@ -3045,6 +3045,7 @@
       </p>
 
       <form id="contact-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_next" id="contact-form-next" value="">
         <input type="hidden" name="_subject" value="Billy The Kid - Contact Form">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="Language" id="contact-form-language">
@@ -3622,56 +3623,39 @@
     });
   }
 
-  // Initialize Contact Form with AJAX
-  function initializeContactForm() {
-    const contactForm = document.getElementById('contact-form');
-    if (!contactForm) return;
+  // Set dynamic redirect URL for Contact Form
+  const contactFormNextInput = document.getElementById('contact-form-next');
+  if (contactFormNextInput) {
+    const currentUrl = window.location.origin + window.location.pathname;
+    contactFormNextInput.value = currentUrl + '?submitted=contact';
+  }
 
-    const submitButton = contactForm.querySelector('.submit-btn');
-    const successMessage = document.getElementById('contact-success-message');
+  // Check for successful contact form submission
+  function checkContactFormSubmission() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const submitted = urlParams.get('submitted');
 
-    contactForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+    if (submitted === 'contact') {
+      const contactModal = document.getElementById('contactModal');
+      const contactForm = document.getElementById('contact-form');
+      const successMessage = document.getElementById('contact-success-message');
 
-      if (submitButton) {
-        submitButton.disabled = true;
-        submitButton.textContent = t('contact.submitting');
-      }
-
-      const formData = new FormData(contactForm);
-
-      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Contact form submitted:', data);
-
+      if (contactModal && contactForm && successMessage) {
+        contactModal.classList.add('active');
         contactForm.style.display = 'none';
-        if (successMessage) successMessage.style.display = 'block';
+        successMessage.style.display = 'block';
 
+        // Remove the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Auto-close after 2.5 seconds
         setTimeout(() => {
           closeContactModal();
           contactForm.style.display = 'block';
-          contactForm.reset();
-          if (successMessage) successMessage.style.display = 'none';
-          if (submitButton) {
-            submitButton.disabled = false;
-            submitButton.textContent = t('contact.submitBtn');
-          }
+          successMessage.style.display = 'none';
         }, 2500);
-      })
-      .catch(error => {
-        console.error('Contact form error:', error);
-        if (submitButton) {
-          submitButton.disabled = false;
-          submitButton.textContent = t('contact.submitBtn');
-        }
-        alert(t('contact.error'));
-      });
-    });
+      }
+    }
   }
 
   // Initialize form on page load
@@ -3688,7 +3672,7 @@
     if (contactFormLang) contactFormLang.value = currentLanguage;
 
     initializeOrderForm();
-    initializeContactForm();
+    checkContactFormSubmission();
 
     // Handle hash navigation from external links (e.g., from petsection.html)
     if (window.location.hash) {
