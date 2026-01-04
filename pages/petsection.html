@@ -1520,6 +1520,7 @@
       </p>
 
       <form id="contact-form-pet" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_next" id="contact-form-pet-next" value="">
         <input type="hidden" name="_subject" value="Billy The Kid - Contact Form">
         <input type="hidden" name="_captcha" value="false">
 
@@ -2291,10 +2292,18 @@
       const formModal = document.getElementById('formModal');
       const form = document.getElementById('pet-design-form');
       const successMessage = document.getElementById('pet-form-success');
+      const formContainer = formModal ? formModal.querySelector('.form-container') : null;
 
-      if (formModal && form && successMessage) {
+      if (formModal && form && successMessage && formContainer) {
         formModal.classList.add('active');
+
+        // Hide form and all sibling elements (title and description)
         form.style.display = 'none';
+        const titleElement = formContainer.querySelector('h2');
+        const descElement = formContainer.querySelector('p');
+        if (titleElement) titleElement.style.display = 'none';
+        if (descElement) descElement.style.display = 'none';
+
         successMessage.style.display = 'block';
 
         // Remove the URL parameter
@@ -2304,6 +2313,8 @@
         setTimeout(() => {
           closeModals();
           form.style.display = 'block';
+          if (titleElement) titleElement.style.display = 'block';
+          if (descElement) descElement.style.display = 'block';
           successMessage.style.display = 'none';
         }, 2500);
       }
@@ -2313,77 +2324,42 @@
   // Run on page load
   checkFormSubmission();
 
-  // Initialize Contact Form with AJAX
-  function initializeContactFormPet() {
-    const form = document.getElementById('contact-form-pet');
-    if (!form) return;
-
-    const submitButton = form.querySelector('.submit-btn');
-    const successMessage = document.getElementById('contact-success-pet');
-
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      if (submitButton) {
-        submitButton.disabled = true;
-        const submittingText = {
-          en: 'Sending...', es: 'Enviando...',
-          fr: 'Envoi...', pt: 'Enviando...'
-        };
-        submitButton.textContent = submittingText[currentLang] || submittingText.en;
-      }
-
-      const formData = new FormData(form);
-
-      fetch('https://formsubmit.co/ajax/e7f6c6ec34b78c2a940e20bf5cd60099', {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Contact form submitted:', data);
-
-        form.style.display = 'none';
-        if (successMessage) successMessage.style.display = 'block';
-
-        setTimeout(() => {
-          closeContactModal();
-          form.style.display = 'block';
-          form.reset();
-          if (successMessage) successMessage.style.display = 'none';
-          if (submitButton) {
-            submitButton.disabled = false;
-            const submitText = {
-              en: 'SEND MESSAGE', es: 'ENVIAR MENSAJE',
-              fr: 'ENVOYER MESSAGE', pt: 'ENVIAR MENSAGEM'
-            };
-            submitButton.textContent = submitText[currentLang] || submitText.en;
-          }
-        }, 2500);
-      })
-      .catch(error => {
-        console.error('Contact form error:', error);
-        if (submitButton) {
-          submitButton.disabled = false;
-          const submitText = {
-            en: 'SEND MESSAGE', es: 'ENVIAR MENSAJE',
-            fr: 'ENVOYER MESSAGE', pt: 'ENVIAR MENSAGEM'
-          };
-          submitButton.textContent = submitText[currentLang] || submitText.en;
-        }
-        const errorText = {
-          en: 'Error sending message. Please try again.',
-          es: 'Error al enviar el mensaje. Inténtalo de nuevo.',
-          fr: 'Erreur lors de l\'envoi du message.',
-          pt: 'Erro ao enviar a mensagem.'
-        };
-        alert(errorText[currentLang] || errorText.en);
-      });
-    });
+  // Set dynamic redirect URL for Contact Form
+  const contactFormPetNextInput = document.getElementById('contact-form-pet-next');
+  if (contactFormPetNextInput) {
+    const currentUrl = window.location.origin + window.location.pathname;
+    contactFormPetNextInput.value = currentUrl + '?submitted=contact';
   }
 
-  initializeContactFormPet();
+  // Check for successful contact form submission
+  function checkContactFormSubmissionPet() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const submitted = urlParams.get('submitted');
+
+    if (submitted === 'contact') {
+      const contactModal = document.getElementById('contactModal');
+      const contactForm = document.getElementById('contact-form-pet');
+      const successMessage = document.getElementById('contact-success-pet');
+
+      if (contactModal && contactForm && successMessage) {
+        contactModal.classList.add('active');
+        contactForm.style.display = 'none';
+        successMessage.style.display = 'block';
+
+        // Remove the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Auto-close after 2.5 seconds
+        setTimeout(() => {
+          closeContactModal();
+          contactForm.style.display = 'block';
+          successMessage.style.display = 'none';
+        }, 2500);
+      }
+    }
+  }
+
+  checkContactFormSubmissionPet();
 
   // ========== HAMBURGER MENU TOGGLE ==========
   function toggleHamburgerMenu() {
