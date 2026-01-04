@@ -1458,8 +1458,8 @@
     <div class="modal-box" style="background: var(--electric-yellow); padding: 40px 0;">
       <div class="close-btn" onclick="closeModals()">&times;</div>
       <div class="form-container">
-        <h2 style="text-align:center; font-size:2rem; margin-top:0;" data-es="EMPIEZA TU DISEÑO" data-en="START YOUR DESIGN" data-fr="COMMENCEZ VOTRE DESIGN" data-pt="COMECE SEU DESIGN">EMPIEZA TU DISEÑO</h2>
-        <p style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
+        <h2 id="pet-form-title" style="text-align:center; font-size:2rem; margin-top:0;" data-es="EMPIEZA TU DISEÑO" data-en="START YOUR DESIGN" data-fr="COMMENCEZ VOTRE DESIGN" data-pt="COMECE SEU DESIGN">EMPIEZA TU DISEÑO</h2>
+        <p id="pet-form-desc" style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
 
         <form id="pet-design-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_next" id="pet-form-next" value="">
@@ -2292,15 +2292,14 @@
       const formModal = document.getElementById('formModal');
       const form = document.getElementById('pet-design-form');
       const successMessage = document.getElementById('pet-form-success');
-      const formContainer = formModal ? formModal.querySelector('.form-container') : null;
+      const titleElement = document.getElementById('pet-form-title');
+      const descElement = document.getElementById('pet-form-desc');
 
-      if (formModal && form && successMessage && formContainer) {
+      if (formModal && form && successMessage) {
         formModal.classList.add('active');
 
-        // Hide form and all sibling elements (title and description)
+        // Hide form, title, and description
         form.style.display = 'none';
-        const titleElement = formContainer.querySelector('h2');
-        const descElement = formContainer.querySelector('p');
         if (titleElement) titleElement.style.display = 'none';
         if (descElement) descElement.style.display = 'none';
 
