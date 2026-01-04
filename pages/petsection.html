@@ -1458,39 +1458,41 @@
     <div class="modal-box" style="background: var(--electric-yellow); padding: 40px 0;">
       <div class="close-btn" onclick="closeModals()">&times;</div>
       <div class="form-container">
-        <h2 id="pet-form-title" style="text-align:center; font-size:2rem; margin-top:0;" data-es="EMPIEZA TU DISEÑO" data-en="START YOUR DESIGN" data-fr="COMMENCEZ VOTRE DESIGN" data-pt="COMECE SEU DESIGN">EMPIEZA TU DISEÑO</h2>
-        <p id="pet-form-desc" style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
+        <div id="pet-form-wrapper">
+          <h2 id="pet-form-title" style="text-align:center; font-size:2rem; margin-top:0;" data-es="EMPIEZA TU DISEÑO" data-en="START YOUR DESIGN" data-fr="COMMENCEZ VOTRE DESIGN" data-pt="COMECE SEU DESIGN">EMPIEZA TU DISEÑO</h2>
+          <p id="pet-form-desc" style="text-align:center; margin-bottom:30px;" data-es="Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong>" data-en="Upload your pet's photo. We'll send you a digital mockup within 24 hours. <strong>It's Free.</strong>" data-fr="Téléchargez la photo de votre animal. Nous vous enverrons une maquette numérique dans les 24 heures. <strong>C'est Gratuit.</strong>" data-pt="Carregue a foto do seu animal. Enviaremos uma maquete digital em 24 horas. <strong>É Grátis.</strong>">Sube la foto de tu mascota. Te enviaremos una propuesta digital en 24 horas. <strong>Es Gratis.</strong></p>
 
-        <form id="pet-design-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="_next" id="pet-form-next" value="">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_subject" value="Billy The Kid - Pet Design Request">
+          <form id="pet-design-form" action="https://formsubmit.co/e7f6c6ec34b78c2a940e20bf5cd60099" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_next" id="pet-form-next" value="">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_subject" value="Billy The Kid - Pet Design Request">
 
-          <div class="form-group">
-            <label data-es="Tu Nombre" data-en="Your Name" data-fr="Votre Nom" data-pt="Seu Nome">Tu Nombre</label>
-            <input type="text" name="name" required placeholder="Juan Pérez">
-          </div>
-          <div class="form-group">
-            <label data-es="Correo Electrónico" data-en="Email Address" data-fr="Adresse E-mail" data-pt="Endereço de E-mail">Correo Electrónico</label>
-            <input type="email" name="email" required placeholder="juan@ejemplo.com">
-          </div>
-          <div class="form-group">
-            <label data-es="Estilo de Alfombra" data-en="Rug Style" data-fr="Style de Tapis" data-pt="Estilo de Tapete">Estilo de Alfombra</label>
-            <select name="style">
-              <option value="Floor_Rug_ES" data-es="Alfombra de Piso (Forma Cabeza)" data-en="Floor Rug (Head Shape)" data-fr="Tapis de Sol (Forme Tête)" data-pt="Tapete de Chão (Forma Cabeça)">Alfombra de Piso (Forma Cabeza)</option>
-              <option value="Wall_Art_ES" data-es="Arte de Pared (Retrato Rectangular)" data-en="Wall Art (Portrait Rectangular)" data-fr="Art Mural (Portrait Rectangulaire)" data-pt="Arte de Parede (Retrato Retangular)">Arte de Pared (Retrato Rectangular)</option>
-              <option value="Unsure_ES" data-es="No estoy seguro aún" data-en="I'm not sure yet" data-fr="Je ne suis pas sûr encore" data-pt="Ainda não tenho certeza">No estoy seguro aún</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label data-es="Sube Foto de Mascota" data-en="Upload Pet Photo" data-fr="Télécharger Photo d'Animal" data-pt="Carregar Foto do Animal">Sube Foto de Mascota</label>
-            <div class="file-upload-wrapper">
-              <input type="file" name="attachment" accept="image/png, image/jpeg" required>
+            <div class="form-group">
+              <label data-es="Tu Nombre" data-en="Your Name" data-fr="Votre Nom" data-pt="Seu Nome">Tu Nombre</label>
+              <input type="text" name="name" required placeholder="Juan Pérez">
             </div>
-            <small style="display:block; margin-top:5px; text-align:center;" data-es="¡Mejor iluminación = mejor resultado!" data-en="Best lighting works best!" data-fr="Meilleur éclairage = meilleur résultat!" data-pt="Melhor iluminação = melhor resultado!">¡Mejor iluminación = mejor resultado!</small>
-          </div>
-          <button type="submit" class="submit-btn" data-es="Enviar Solicitud" data-en="Send Request" data-fr="Envoyer la Demande" data-pt="Enviar Pedido">Enviar Solicitud</button>
-        </form>
+            <div class="form-group">
+              <label data-es="Correo Electrónico" data-en="Email Address" data-fr="Adresse E-mail" data-pt="Endereço de E-mail">Correo Electrónico</label>
+              <input type="email" name="email" required placeholder="juan@ejemplo.com">
+            </div>
+            <div class="form-group">
+              <label data-es="Estilo de Alfombra" data-en="Rug Style" data-fr="Style de Tapis" data-pt="Estilo de Tapete">Estilo de Alfombra</label>
+              <select name="style">
+                <option value="Floor_Rug_ES" data-es="Alfombra de Piso (Forma Cabeza)" data-en="Floor Rug (Head Shape)" data-fr="Tapis de Sol (Forme Tête)" data-pt="Tapete de Chão (Forma Cabeça)">Alfombra de Piso (Forma Cabeza)</option>
+                <option value="Wall_Art_ES" data-es="Arte de Pared (Retrato Rectangular)" data-en="Wall Art (Portrait Rectangular)" data-fr="Art Mural (Portrait Rectangulaire)" data-pt="Arte de Parede (Retrato Retangular)">Arte de Pared (Retrato Rectangular)</option>
+                <option value="Unsure_ES" data-es="No estoy seguro aún" data-en="I'm not sure yet" data-fr="Je ne suis pas sûr encore" data-pt="Ainda não tenho certeza">No estoy seguro aún</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-es="Sube Foto de Mascota" data-en="Upload Pet Photo" data-fr="Télécharger Photo d'Animal" data-pt="Carregar Foto do Animal">Sube Foto de Mascota</label>
+              <div class="file-upload-wrapper">
+                <input type="file" name="attachment" accept="image/png, image/jpeg" required>
+              </div>
+              <small style="display:block; margin-top:5px; text-align:center;" data-es="¡Mejor iluminación = mejor resultado!" data-en="Best lighting works best!" data-fr="Meilleur éclairage = meilleur résultat!" data-pt="Melhor iluminação = melhor resultado!">¡Mejor iluminación = mejor resultado!</small>
+            </div>
+            <button type="submit" class="submit-btn" data-es="Enviar Solicitud" data-en="Send Request" data-fr="Envoyer la Demande" data-pt="Enviar Pedido">Enviar Solicitud</button>
+          </form>
+        </div>
 
         <!-- Success Message -->
         <div id="pet-form-success" style="display: none; text-align: center; padding: 40px;">
@@ -2290,19 +2292,14 @@
 
     if (submitted === 'pet') {
       const formModal = document.getElementById('formModal');
-      const form = document.getElementById('pet-design-form');
+      const formWrapper = document.getElementById('pet-form-wrapper');
       const successMessage = document.getElementById('pet-form-success');
-      const titleElement = document.getElementById('pet-form-title');
-      const descElement = document.getElementById('pet-form-desc');
 
-      if (formModal && form && successMessage) {
+      if (formModal && formWrapper && successMessage) {
         formModal.classList.add('active');
 
-        // Hide form, title, and description
-        form.style.display = 'none';
-        if (titleElement) titleElement.style.display = 'none';
-        if (descElement) descElement.style.display = 'none';
-
+        // Hide entire form wrapper (title, desc, and form)
+        formWrapper.style.display = 'none';
         successMessage.style.display = 'block';
 
         // Remove the URL parameter
@@ -2311,9 +2308,7 @@
         // Auto-close after 2.5 seconds
         setTimeout(() => {
           closeModals();
-          form.style.display = 'block';
-          if (titleElement) titleElement.style.display = 'block';
-          if (descElement) descElement.style.display = 'block';
+          formWrapper.style.display = 'block';
           successMessage.style.display = 'none';
         }, 2500);
       }
