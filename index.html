@@ -250,6 +250,15 @@
     }
   }
 
+  @media (max-width: 320px) {
+    .hamburger-btn {
+      width: 40px;
+      height: 40px;
+      top: 45px;
+      left: 10px;
+    }
+  }
+
   h1 {
     font-family: 'Righteous', cursive;
     font-size: 5rem;
@@ -729,6 +738,105 @@
     text-align: center;
     cursor: pointer;
     background: #f9f9f9;
+  }
+
+  /* Hide overflow text from file input fields on mobile */
+  input[type="file"] {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0;
+    color: transparent;
+  }
+
+  /* Style the file selector button to be visible and usable */
+  input[type="file"]::file-selector-button {
+    font-size: 1rem;
+    color: var(--w-dark);
+    background: var(--w-yellow);
+    border: 2px solid var(--w-dark);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: inherit;
+    transition: all 0.2s;
+    margin-right: 10px;
+  }
+
+  input[type="file"]::file-selector-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px var(--w-dark);
+  }
+
+  /* Firefox/Safari compatibility */
+  input[type="file"]::-webkit-file-upload-button {
+    font-size: 1rem;
+    color: var(--w-dark);
+    background: var(--w-yellow);
+    border: 2px solid var(--w-dark);
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: inherit;
+    transition: all 0.2s;
+  }
+
+  input[type="file"]::-webkit-file-upload-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0px var(--w-dark);
+  }
+
+  /* Mobile responsive adjustments for file upload wrapper */
+  @media (max-width: 480px) {
+    .file-upload-wrapper {
+      padding: 15px;
+    }
+
+    input[type="file"]::file-selector-button {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    .file-upload-wrapper {
+      padding: 12px;
+    }
+
+    input[type="file"]::file-selector-button {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+    }
+  }
+
+  @media (max-width: 320px) {
+    .file-upload-wrapper {
+      padding: 10px;
+    }
+
+    input[type="file"]::file-selector-button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
   }
 
   .submit-btn {
@@ -1903,7 +2011,7 @@
   /* Very small phones (portrait) - 320px and below */
   @media (max-width: 320px) {
     .logo-corner {
-      width: 36px; /* 40% smaller than 60px */
+      width: 40px; /* 40% smaller than 60px */
       top: 10px;
       left: 10px;
       filter: drop-shadow(2px 2px 0px #D1A700);
